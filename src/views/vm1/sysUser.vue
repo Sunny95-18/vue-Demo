@@ -215,7 +215,8 @@ export default {
         },
         {
           title: "添加时间",
-          key: "ctime"
+          key: "ctime",
+          width: 200,
         },
         {
           title: "操作",
