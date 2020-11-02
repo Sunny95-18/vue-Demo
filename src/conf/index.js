@@ -2,8 +2,8 @@
  * 实现apiServer可在线上修改
  * 
  */
-// let server = "http://192.168.88.19:8088/";
-let server = "http://47.102.102.233:8088/";
+let server = "http://192.168.88.19:8088/";
+// let server = "http://47.102.102.233:8088/";
 // if(window.AppServerInfo && typeof(AppServerInfo) == 'function') {
 //   server = AppServerInfo().getServerInfo("server");
 //   console.log("server:",server)
@@ -19,8 +19,8 @@ const conf = {
     /**
      * ip和端口
      */
-    // server:"192.168.88.19:8088",
-    server:"47.102.102.233:8088",
+    server:"192.168.88.19:8088",
+    // server:"47.102.102.233:8088",
     /**
      * 上下文
      */
@@ -63,7 +63,7 @@ const conf = {
     /**
      * @description 默认打开的首页的路由name值，默认为home
      */
-    homeName: 'vm_list',
+    homeName: 'init',
     
     /**
      * @description 响应状态码

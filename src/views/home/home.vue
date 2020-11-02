@@ -2,50 +2,187 @@
 @import "./home.less";
 </style>
 <template>
-  <div class="home-main" :style="{height:height + 'px'}">
-    <p>欢迎使用云服务器密码机管理系统</p>
-    <div class="home-bg"></div>
-    <!-- <Row :gutter="10">
+  <div class="home-bg">
+    <Row :gutter="20" style="margin-top: 10px">
+      <Col
+        span="6"
+        v-for="(infor, i) in inforCardData"
+        :key="`infor-${i}`"
+        style="height: 120px"
+      >
+        <infor-card
+          shadow
+          :color="infor.color"
+          :icon="infor.icon"
+          :icon-size="36"
+        >
+          <count-to :end="infor.count" count-class="count-style" />
+          <p>{{ infor.title }}</p>
+        </infor-card>
+      </Col>
+    </Row>
+    <Row :gutter="20" style="margin-top: 20px;height:300px">
       <Col span="12">
-        <ve-gauge :data="chartData" />
+        <Card shadow>
+             <h3>设备运行状态</h3>
+          <div style="margintop: 20px; margin-left: 20px;margin-top:30px;">
+            CPU利用率： {{ cpu }}% of 4 CPU(s)
+            <Progress
+              v-if="cpu <= 20"
+              :percent="cpu"
+              :stroke-color="['#0f0', '#0f0']"
+            />
+            <Progress
+              v-else-if="cpu > 20 && cpu <= 80"
+              :percent="cpu"
+              :stroke-color="['#0f0', '#f78603']"
+            />
+            <Progress
+              v-else
+              :percent="cpu"
+               :hide-info="true"
+              :stroke-color="['#0f0', '#FF0000']"
+            />
+          </div>
+          <div style="margintop: 40px; margin-left: 20px;margin-top:20px;">
+            内存使用率: {{ memory }}% (1004.93 MiB of 5.78 GiB)
+            <Progress
+              v-if="memory <= 20"
+              :percent="memory"
+              :stroke-color="['#0f0', '#0f0']"
+            />
+            <Progress
+              v-else-if="memory > 20 && memory <= 80"
+              :percent="memory"
+              :stroke-color="['#0f0', '#f78603']"
+            />
+            <Progress
+              v-else
+              :percent="memory"
+               :hide-info="true"
+              :stroke-color="['#0f0', '#FF0000']"
+            />
+          </div>
+          <div style="margintop: 40px; margin-left: 20px;margin-top:20px">
+            硬盘容量: {{ capacity }}% 0(10 GiB of 40 GiB)
+            <Progress
+              v-if="capacity <= 20"
+              :percent="capacity"
+              :stroke-color="['#0f0', '#0f0']"
+            />
+            <Progress
+              v-else-if="capacity > 20 && capacity <= 80"
+              :percent="capacity"
+              :stroke-color="['#0f0', '#0f0']"
+            />
+            <Progress
+              v-else
+              :percent="capacity"
+              :hide-info="true"
+              :stroke-color="['#0f0', '#FF0000']"
+            />
+          </div>
+        </Card>
       </Col>
       <Col span="12">
-        <ve-gauge :data="chartData" />
+        <Card shadow style="height:300px">
+          <ve-line :data="visitData" style="height:300px"></ve-line>
+        </Card>
       </Col>
-    </Row>-->
+    </Row>
+
+    <!-- <Row :gutter="20" style="margin-top: 20px">
+      <Col span="12">
+        <Card shadow>
+          <ve-line :data="visitData"></ve-line>
+        </Card>
+      </Col>
+      <Col span="12">
+        <Card shadow>
+          <ve-line :data="visitData"></ve-line>
+        </Card>
+      </Col>
+    </Row> -->
   </div>
 </template>
 
 <script>
-import common from "@/utils/common";
 import conf from "@/conf/";
 import { setInterval } from "timers";
 import VeGauge from "v-charts/lib/gauge";
+import VeLine from "v-charts/lib/line";
+import common from "@/utils/common";
+import InforCard from "_c/info-card";
+import CountTo from "_c/count-to";
+import { getToken } from '@/utils/token'
+
 export default {
   name: "home",
+  components: { VeLine, VeGauge, InforCard, CountTo },
   data() {
     return {
+      cpu: 40,
+      memory: 17,
+      capacity: 50,
+      inforCardData: [
+        // { title: "累计点击", icon: "md-person", count: 232, color: "#9A66E4" },
+        {
+          title: "用户数量",
+          icon: "md-contacts",
+          count: 2,
+          color: "#2d8cf0",
+        },
+
+        {
+          title: "证书数量",
+          icon: "md-book",
+          count: 8,
+          color: "#19be6b",
+        },
+        { title: "密钥数量", icon: "md-key", count: 45, color: "#ed3f14" },
+        // { title: '新增互动', icon: 'md-chatbubbles', count: 12, color: '#E46CBB' },
+        // { title: '新增页面', icon: 'md-map', count: 14, color: '#9A66E4' }
+      ],
+      visitData: {
+        columns: ["日期", "日访问量"],
+        rows: [
+          { 日期: "1/1", 日访问量: 1 },
+          { 日期: "1/2", 日访问量: 0 },
+          { 日期: "1/3", 日访问量: 2 },
+          { 日期: "1/4", 日访问量: 1 },
+          { 日期: "1/5", 日访问量: 1 },
+         
+        ],
+      },
       chartData: {
         columns: ["type", "a", "b", "value"],
-        rows: [{ type: "速度", value: 80, a: 0, b: 2 }]
+        rows: [{ type: "速度", value: 80, a: 0, b: 2 }],
       },
       offsetTop: 126,
       outLine: {},
-      timer: -1
+      timer: -1,
     };
   },
   created() {
-    this.showNotice();
+    window.setInterval(() => {
+      setTimeout(this.getDeviceInfo(), 0);
+    }, 10000);
+
+
   },
   methods: {
     ...common.methods,
-    showNotice() {
-      this.$Notice.info({
-        title: "使用向导",
-        duration: 3,
-        render: h => {
-          return h("a", "初次使用本系统建议先操作安装向导！");
-        }
+    getDeviceInfo() {
+      const token=getToken();
+      if(!token){return;}
+        this.$store.dispatch("getDeviceInfo").then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == "200") {
+            this.cpu=resData.data.cpu;
+            this.memory=resData.data.cpu;
+            this.capacity=resData.data.disk;
+
+        } 
       });
     }
   },
@@ -56,31 +193,24 @@ export default {
   },
   mounted() {},
   computed: {
+     state() {
+      return this.$store.state.home;
+    },
     height() {
       return this.$store.state.common.documentBodyClientHeight - this.offsetTop;
-    }
+    },
   },
-  components: { VeGauge }
 };
 </script>
-<style scoped>
-.home-main {
-  background-color: white;
-}
-p{
-  margin-top:5%;
-  color: red;
-  text-align: center;
-  font-size: 30px;
-}
+<style lang="less">
 .home-bg {
-  top: 10%;
-  right: -20%;
-  width: 60%;
-  height: 60%;
-  background-image: url("../../assets/yjmj.png");
-  background-size: cover;
-  background-position: center;
-  position: relative;
+  height: 1000px;
+  overflow: scroll;
+}
+.count-style {
+  font-size: 50px;
+}
+canvas{
+  height:300px !important;
 }
 </style>

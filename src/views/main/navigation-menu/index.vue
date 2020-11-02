@@ -10,7 +10,7 @@
       <div v-show="shrink" class="collapsed-logo-bg" key="min-logo" />
     </div>
     <div style="padding-bottom: 25px;text-align: center;">
-      <h2 v-show="!shrink" style="color:white">云服务器密码机管理系统</h2>
+      <h2 v-show="!shrink" style="color:white">签名验签服务器管理系统</h2>
     </div>
 
     <!--导航菜单-->

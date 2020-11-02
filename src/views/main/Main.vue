@@ -42,9 +42,9 @@
           <!--
           <theme-switch></theme-switch>
           -->
-          <div style="float:left;marginTop:20px">
+          <!-- <div style="float:left;marginTop:20px">
             <h3>当前IP:{{ip}}</h3>
-          </div>
+          </div> -->
           <div class="user-dropdown-menu-con">
             <user :type="type" />
           </div>
@@ -89,7 +89,7 @@ export default {
     };
   },
   created() {
-    this.getIp();
+    // this.getIp();
   },
   computed: {
     ip() {

@@ -1,6 +1,6 @@
 axios.interceptors.response.use(function (response) { 
     // 用户信息是否超时，重定向到登录页面 
-    console.log(response+"1111111111111111111111");
+
     if (response.data.errorMsg== '请登录'){ 
         localStorage.clear() 
         router.replace({ 
@@ -10,7 +10,7 @@ axios.interceptors.response.use(function (response) {
     } 
     return response 
 }, function (error) { 
-    console.log("https--- >:",error)
+  
     return Promise.reject(error) 
 })
 

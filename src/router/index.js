@@ -1,4 +1,4 @@
-import { LoadingBar } from 'view-design'
+import { LoadingBar, Message } from 'view-design'
 import Router from 'vue-router'
 import { routers } from '@/router/router.js'
 import { getToken } from '@/utils/token'
@@ -17,21 +17,23 @@ const router = new Router({
 
 export default router;
 
+
+
 // 权限管理
 router.beforeEach((to, from, next) => {
-  // console.log("to: ", to)
+  // console.log("name:"+to.name);
+  // console.log("to:"+to.matched[0].meta.access);
   LoadingBar.start();
-  const token = getToken();
-  // console.log("token:",token);
+ 
 
-  if (!token && to.name !== "login") {
+  const token = getToken();
+ if (!token && to.name !== "login") {
     // 未登录且要跳转的页面不是登录页
     // 如果有页面不需要登陆也可以访问的可以修改判断条件
-
     next({
       name: "login" // 跳转到登录页
-    })
-
+    });
+  
   } else if (!token && to.name === "login") {
     // 未登陆且要跳转的页面是登录页
     next();
@@ -39,7 +41,7 @@ router.beforeEach((to, from, next) => {
 
     // 如果已经登陆判断是否有权限访问
     let access = Cookies.get("access");
-
+       
     if (access == 0) {
       next();
     } else if (to.matched && to.matched.length > 0) {
@@ -61,7 +63,9 @@ router.beforeEach((to, from, next) => {
     }
 
 
+
   }
+
   // next()
 });
 

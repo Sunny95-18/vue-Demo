@@ -6,14 +6,14 @@
         <span id="type" class="main-user-name">{{ loginName }}</span>
       </a>
       <DropdownMenu style="width:160px;" slot="list">
-        <DropdownItem v-show="type===1" name="updatePwd">
+        <!-- <DropdownItem v-show="type===1" name="updatePwd">
           <Icon type="md-body" />
           <span style="padding-left:10px;">修改密码</span>
         </DropdownItem>
         <DropdownItem v-show="type===2" name="govmList">
           <Icon type="md-arrow-back" />
           <span style="padding-left:10px;">返回虚拟机列表</span>
-        </DropdownItem>
+        </DropdownItem> -->
         <DropdownItem name="loginout">
           <Icon type="md-log-out" />
           <span style="padding-left:10px;">退出登录</span>

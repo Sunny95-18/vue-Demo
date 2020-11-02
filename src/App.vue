@@ -9,8 +9,8 @@ export default {
   name: "App",
   mounted() {
     //关闭浏览器清空token
-    window.onunload = function(e) {
-      // window.localStorage.removeItem("123");
+    window.onunload  = function(e) {
+      window.localStorage.removeItem("c");
     //  Cookies.remove("Authorization");
     //  sessionStorage.removeItem(Authorization);
     };

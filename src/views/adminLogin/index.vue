@@ -1,8 +1,9 @@
 <template>
   <div>
     <Card>
-      <List header="用户登录" border size="large">
-        <ListItem>在此登录管理员或操作员。</ListItem>
+      <List border size="large">
+        <ListItem><h3>用户登录</h3></ListItem>
+        <ListItem>在此登录管理员。</ListItem>
         <ListItem>
           <Form :model="formItem" :label-width="200" inline>
             <FormItem label="请输入USBKey的PIN的口令:">
@@ -15,8 +16,9 @@
         </ListItem>
       </List>
     </Card>
-    <Card>
-      <List header="用户状态" border size="large">
+    <Card style="margin-top:20px">
+      <List border size="large">
+         <ListItem><h3>用户状态</h3></ListItem>
         <Table
           ref="tab"
           border
@@ -26,6 +28,7 @@
           class="table"
           :height="tableHeight"
           :span-method="handleSpan"
+          :disabled-hover="true"
         >
           <template slot-scope="{ index }" slot="action">
             <div>
@@ -52,11 +55,6 @@ export default {
           key: "status"
         },
         {
-          title: "操作员登录状态",
-          width: 200,
-          key: "optStatus"
-        },
-        {
           title: "管理员数目",
           width: 200,
           key: "number"
@@ -70,6 +68,7 @@ export default {
 
         {
           title: "操作",
+            width: 200,
           slot: "action"
         }
       ]
@@ -108,6 +107,23 @@ export default {
         };
       }
       //合并第二列
+      if (rowIndex === 0 && columnIndex === 0) {
+        return {
+          rowspan: 3,
+          colspan: 1
+        };
+      } else if (rowIndex === 1 && columnIndex === 0) {
+        return {
+          rowspan: 0,
+          colspan: 0
+        };
+      } else if (rowIndex === 2 && columnIndex === 0) {
+        return {
+          rowspan: 0,
+          colspan: 0
+        };
+      }
+      //合并第4列
       if (rowIndex === 0 && columnIndex === 1) {
         return {
           rowspan: 3,
@@ -119,23 +135,6 @@ export default {
           colspan: 0
         };
       } else if (rowIndex === 2 && columnIndex === 1) {
-        return {
-          rowspan: 0,
-          colspan: 0
-        };
-      }
-      //合并第4列
-      if (rowIndex === 0 && columnIndex === 2) {
-        return {
-          rowspan: 3,
-          colspan: 1
-        };
-      } else if (rowIndex === 1 && columnIndex === 2) {
-        return {
-          rowspan: 0,
-          colspan: 0
-        };
-      } else if (rowIndex === 2 && columnIndex === 2) {
         return {
           rowspan: 0,
           colspan: 0

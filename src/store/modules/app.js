@@ -1,6 +1,4 @@
-import {otherRouter,appRouter,vmListRouter} from '@/router/router.js'
-import vmList from './vmList'
-import user from './user'
+import {otherRouter,appRouter} from '@/router/router.js'
 const app = {
     state: {
         cachePage: [],
@@ -10,13 +8,6 @@ const app = {
 		openNames : [],    // 要展开的菜单数组
         menuTheme: 'dark', // 主题
         themeColor: '',
-        pageVmTagsList:[
-            {
-                title: '虚拟机首页',
-                path: '',
-                name: 'vm_list'
-            }
-        ],
         pageOpenedList: [
             {
             title: '首页',
@@ -31,7 +22,6 @@ const app = {
         menuList: [],
 		pathMapping : {},
         routers: [
-            vmListRouter,
             otherRouter,
             ...appRouter,
         ],
@@ -43,12 +33,26 @@ const app = {
     getters: {
         // 根据不同的权限加载不同的菜单
         menus: (state, getters, rootState) => {
-            return state.menuList;
+            let accessCode = parseInt(Cookies.get('access'));
+            if(accessCode!=-2){
+             var menus=state.menuList.filter(router=>{
+                   if(!router.meta|| router.meta.access==accessCode){
+                       return true;
+                   }
+                   return false;
+             });
+             return menus;
+            }else{
+                return state.menuList;
+            }
+            
+          
+            // return state.menuList;
             /*
             var access = state.access + "";
             // 超管所有权限
             if(access == 0) return state.menuList;
-            var menus = state.menuList.filter(route => {
+            var menus = state.menuList.filter(route => {;
                 if(!route.meta || !route.meta.access) {
                     return true;
                 }
@@ -65,26 +69,6 @@ const app = {
             }
             return menus;*/
         },
-        // vmMenus:(state,getters,rootState)=>{
-        //     let menus=[];
-        //     menus.push(vmListRouter);
-
-        //     //  menus[0].children.push({path: '/vmIndex1', title: '虚拟机11',  name: 'vm_list1', component: () => import('@/views/vm1/vmInfo.vue')});
-        //     //  const children=menus[0].children;
-        //     // let newChildren=[];
-        //     //  children.forEach(child=>{
-        //     //      console.log("child,",child)
-        //     //      if(child.meta.id<=0){
-        //     //         newChildren.push(child);
-        //     //      }
-        //     //  })
-        //     //  menus[0].children=newChildren;
-        //     // console.log("menus",menus[0].children)
-        //     const username=user.loginName;
-        //     console.log("rows:",username)
-        //     console.log("cccccccccccccccc")
-        //     return menus;
-        // }
     },
     mutations: {
 		appInit (state) {
@@ -103,6 +87,7 @@ const app = {
             // 3 将每个叶子（对象没有children属性）路由添加到tagsList
             var parseRouter = (item,currentPathArr) => {
                 let name = item.name;
+                // console.log("routerName:"+name);
 			    pathMapping[name] = item;
                 if(!currentPathArr) {
                      currentPathArr = [
@@ -144,6 +129,7 @@ const app = {
             });
             
         },
+
         // 设置菜单权限信息
         setAccess(state, access) {
             state.access = access
@@ -153,8 +139,10 @@ const app = {
         },
         updateMenulist (state) {
             let accessCode = parseInt(Cookies.get('access'));
+            // console.log("accessCode:"+accessCode);
             let menuList = [];
             appRouter.forEach((item, index) => {
+                // console.log("路由："+item.meta.access);
                 if (item.access !== undefined) {
                     if (Util.showThisRoute(item.access, accessCode)) {
                         if (item.children.length === 1) {

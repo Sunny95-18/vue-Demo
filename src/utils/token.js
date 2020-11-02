@@ -1,7 +1,11 @@
 import conf from '@/conf/'
+var millisecond = new Date().getTime();
+var expiresTime = new Date(millisecond + 60 * 1000 * 15 );  //15分钟过期
 
 export const setToken = (token) => {
-    Cookies.set(conf.tokenKey, token/*, { expires: conf.tokenExpires || 1 }*/)
+    // console.log("time:"+expiresTime)
+    Cookies.set(conf.tokenKey, token, { expires: expiresTime })
+    // Cookies.set(conf.tokenKey,token);
     // sessionStorage.setItem(conf,tokenKey,token);
 }
 

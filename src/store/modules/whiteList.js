@@ -6,33 +6,63 @@ const whiteList = {
         rows: []
     },
     mutations: {
-        demoPages(state,queryParams) {
+        getWhiteList(state, queryParams) {
             state.loading = true;
-            
-            setTimeout(function() {
-                var totalCount = parseInt((Math.random() * 10000) % 10);
-                var data = [];
-                for(var i = 0 ; i < totalCount; i++) {
-                    if(i%2==0){
-                    data.push({
-                        id: i,
-                        name:  "虚拟机"+i,
-                        status: "运行中",
-                        IP: "127.0.0.1"
+            const requestData = conf.requestData;
+            requestData.data = {
+                current: queryParams.current,
+                size: queryParams.size,
+            }
+            setTimeout(function () {
+                axios.post(conf.apiServer + "whiteList/getWhiteList", requestData).then(
+                    res => {
+                        var resData = res.data;
+                        if (resData.code == 200 && resData.data != null) {
+                            state.rows = resData.data.data;
+                            state.totalCount = resData.data.total;
+                        } else {
+                            state.rows = [];
+                            state.totalCount = 0;
+                        }
+
+                    }).catch(err => {
+                        console.error(err);
+                    }).then(() => {
+                        state.loading = false;
                     });
-                }else{
-                    data.push({
-                        id: i,
-                        name: "虚拟机"+i,
-                        status: "停止",
-                        IP: "127.0.0.1"
-                    });
-                }
-                }
-                state.totalCount = totalCount;
-                state.rows = data;
-                state.loading = false;
-            },500);
+            }, 500);
+        },
+
+    },
+    actions: {
+        add({ commit }, ip) {
+            const requestData = conf.requestData;
+            requestData.data = ip;
+            return new Promise((resolve, reject) => {
+                axios.post(conf.apiServer + "whiteList/addWhitehost", requestData, {
+                    timeout: 5000,
+                }).then(res => {
+                    resolve(res);
+                }).catch(err => {
+                    console.log(err.response)
+                    reject(err);
+                });
+            });
+        },
+        deleteIP({ commit }, id) {
+            const requestData = conf.requestData;
+            requestData.data = id;
+            return new Promise((resolve, reject) => {
+                axios.post(conf.apiServer + "whiteList/delWhitehost", requestData, {
+                    timeout: 5000,
+                }).then(res => {
+                    resolve(res);
+                }).catch(err => {
+                    console.log(err.response)
+                    reject(err);
+                });
+            });
+
         }
     }
 };

@@ -3,7 +3,6 @@ import Vuex from 'vuex'
 import app from './modules/app'
 import common from './modules/common'
 
-import vmList from './modules/vmList'
 import logList from './modules/logList'
 import whiteList from './modules/whiteList'
 import asymmetricKey from'./modules/asymmetricKey'
@@ -17,6 +16,13 @@ import backupKey from './modules/backupKey'
 import guide from './modules/guide'
 import device from './modules/device'
 import getters from './getters'
+//
+import adminManagement from './modules/adminManagement'
+import keyManagement from './modules/keyManagement'
+import trustMechanism from './modules/trustMechanism'
+import crlManagement from './modules/crlManagement'
+import sginAdnEncryCert from './modules/sginAdnEncryCert'
+import home from './modules/home'
 
 // 服务配置
 import {setApiServer} from "@/conf/"
@@ -44,10 +50,10 @@ const store = new Vuex.Store({
             }
 
             // 已经选择的节点服务
-            let server = Cookies.get("server");
-            if(server) {
-                setApiServer(server);
-            }
+            // let server = Cookies.get("server");
+            // if(server) {
+            //     setApiServer(server);
+            // }
             
         },
         clear(state) {
@@ -59,7 +65,6 @@ const store = new Vuex.Store({
     modules: {
         app,
         common,
-        vmList,
         logList,
         whiteList,
         asymmetricKey,
@@ -71,7 +76,14 @@ const store = new Vuex.Store({
         serviceStatus,
         backupKey,
         guide,
-        device
+        device,
+        //
+        adminManagement,
+        keyManagement,
+        trustMechanism,
+        crlManagement,
+        sginAdnEncryCert,
+        home
     },
     getters
 }); 

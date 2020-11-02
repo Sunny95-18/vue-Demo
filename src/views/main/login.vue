@@ -9,7 +9,7 @@
         <Card :bordered="false">
           <p slot="title" style="text-align:center;font-size:20px;font-weight:800">
             <Icon type="md-key11"></Icon>
-            <span>云密码机管理系统登录</span>
+            <span>签名验签服务器管理系统登录</span>
           </p>
           <div class="form-con">
             <Form id="loginForm" ref="loginForm" :model="form" :rules="rules">
@@ -66,7 +66,6 @@ export default {
   methods: {
     handleSubmit() {
           this.$refs.loginForm.validate(valid => {
-            
         if (valid) {
           this.logining = true;
           this.$store.dispatch("handleLogin",{
@@ -74,32 +73,26 @@ export default {
             password: this.form.password
           }).then((res) => {
             var resData = res.data;
-        
-
             if(resData && resData.code == "200") {
-
-              // // 选择的节点服务
-              // Cookies.set("server", conf.);
-
               // 登陆成功
               let userInfo = resData.data;
+              console.log("userInfo:",userInfo);
               let token = "Bearer " + userInfo.token;
-
-              let access = userInfo.access;
-              if (this.form.username === "super_admin") {
-               this.$store.commit("showSysUserRole");
-                // 所有权限
-                access = 0;
-              } else {
-                 this.$store.commit("removeSysUserRole");
-                Cookies.set("access", 1);
-                access = 1;
-              }
+              
+              let access =0;
+              // if (this.form.username === "super_admin") {
+              //  this.$store.commit("showSysUserRole");
+              //   // 所有权限
+              //   access = 0;
+              // } else {
+              //    this.$store.commit("removeSysUserRole");
+              //   Cookies.set("access", 1);
+              //   access = 1;
+              // }
               this.$store.commit("setUserName", userInfo.loginName);
 
               // 登陆成功获取用户信息，token等
               this.$store.commit("setToken", token);
-              
               Cookies.set("access", access);
               this.$store.commit("setAccess", access);
 
@@ -107,7 +100,7 @@ export default {
               this.$store.commit("init");
               // 首页
               this.$router.replace({
-                name: "vm_list"
+                name: "home_index"
               });
             
 
