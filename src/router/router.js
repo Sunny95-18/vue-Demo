@@ -119,6 +119,26 @@ export const appRouter = [
             },
         ]
     },
+    {
+        path: '/admin-management',
+        icon: 'md-contacts',
+        title: '管理员管理',
+        name: 'admin-management',
+        component: Main,
+        meta: {
+            access: ["-1"]
+        },
+        children: [
+            {
+                path: 'addAdmin', title: '新建管理员', icon: 'md-person-add', name: 'add-admin', component: () => import('@/views/admin-management/createAdmin'),
+                meta: {
+                    access: ["-1"]
+                },
+            }
+
+
+        ]
+    },
     //超级管理员部分
     {
         path: '/system-management',
@@ -156,26 +176,7 @@ export const appRouter = [
             }
         ]
     },
-    {
-        path: '/admin-management',
-        icon: 'md-contacts',
-        title: '管理员管理',
-        name: 'admin-management',
-        component: Main,
-        meta: {
-            access: ["-1"]
-        },
-        children: [
-            {
-                path: 'createAdmin', title: '新建管理员', icon: 'md-person-add', name: 'create-admin', component: () => import('@/views/admin-management/createAdmin'),
-                meta: {
-                    access: ["-1"]
-                },
-            }
 
-
-        ]
-    },
     {
         path: '/admin-management',
         icon: 'md-contacts',
@@ -273,7 +274,7 @@ export const appRouter = [
     //     ]
     // },
 
-    //操作员部分菜单权限
+    //管理员部分菜单权限
     {
         path: '/service-management',
         icon: 'md-browsers',

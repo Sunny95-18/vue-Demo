@@ -21,11 +21,11 @@
         </infor-card>
       </Col>
     </Row>
-    <Row :gutter="20" style="margin-top: 20px;height:300px">
+    <Row :gutter="20" style="margin-top: 20px; height: 300px">
       <Col span="12">
         <Card shadow>
-             <h3>设备运行状态</h3>
-          <div style="margintop: 20px; margin-left: 20px;margin-top:30px;">
+          <h3>设备运行状态</h3>
+          <div style="margintop: 20px; margin-left: 20px; margin-top: 30px">
             CPU利用率： {{ cpu }}% of 4 CPU(s)
             <Progress
               v-if="cpu <= 20"
@@ -40,11 +40,11 @@
             <Progress
               v-else
               :percent="cpu"
-               :hide-info="true"
+              :hide-info="true"
               :stroke-color="['#0f0', '#FF0000']"
             />
           </div>
-          <div style="margintop: 40px; margin-left: 20px;margin-top:20px;">
+          <div style="margintop: 40px; margin-left: 20px; margin-top: 20px">
             内存使用率: {{ memory }}% (1004.93 MiB of 5.78 GiB)
             <Progress
               v-if="memory <= 20"
@@ -59,11 +59,11 @@
             <Progress
               v-else
               :percent="memory"
-               :hide-info="true"
+              :hide-info="true"
               :stroke-color="['#0f0', '#FF0000']"
             />
           </div>
-          <div style="margintop: 40px; margin-left: 20px;margin-top:20px">
+          <div style="margintop: 40px; margin-left: 20px; margin-top: 20px">
             硬盘容量: {{ capacity }}% 0(10 GiB of 40 GiB)
             <Progress
               v-if="capacity <= 20"
@@ -85,8 +85,8 @@
         </Card>
       </Col>
       <Col span="12">
-        <Card shadow style="height:300px">
-          <ve-line :data="visitData" style="height:300px"></ve-line>
+        <Card shadow style="height: 300px">
+          <ve-line :data="visitData" style="height: 300px"></ve-line>
         </Card>
       </Col>
     </Row>
@@ -114,7 +114,7 @@ import VeLine from "v-charts/lib/line";
 import common from "@/utils/common";
 import InforCard from "_c/info-card";
 import CountTo from "_c/count-to";
-import { getToken } from '@/utils/token'
+import { getToken } from "@/utils/token";
 
 export default {
   name: "home",
@@ -145,14 +145,7 @@ export default {
       ],
       visitData: {
         columns: ["日期", "日访问量"],
-        rows: [
-          { 日期: "1/1", 日访问量: 1 },
-          { 日期: "1/2", 日访问量: 0 },
-          { 日期: "1/3", 日访问量: 2 },
-          { 日期: "1/4", 日访问量: 1 },
-          { 日期: "1/5", 日访问量: 1 },
-         
-        ],
+        rows: [],
       },
       chartData: {
         columns: ["type", "a", "b", "value"],
@@ -164,27 +157,55 @@ export default {
     };
   },
   created() {
+    this.loadVisitData();
+    this.loadPanelData();
     window.setInterval(() => {
       setTimeout(this.getDeviceInfo(), 0);
-    }, 10000);
-
-
+    }, 15000);
   },
   methods: {
     ...common.methods,
     getDeviceInfo() {
-      const token=getToken();
-      if(!token){return;}
-        this.$store.dispatch("getDeviceInfo").then((res) => {
+      const token = getToken();
+      if (!token) {
+        return;
+      }
+      this.$store.dispatch("getDeviceInfo").then((res) => {
         var resData = res.data;
         if (resData && resData.code == "200") {
-            this.cpu=resData.data.cpu;
-            this.memory=resData.data.cpu;
-            this.capacity=resData.data.disk;
-
-        } 
+          this.cpu = resData.data.cpu;
+          this.memory = resData.data.cpu;
+          this.capacity = resData.data.disk;
+        }
       });
-    }
+    },
+    loadVisitData() {
+      this.$store.dispatch("getVisitData").then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == "200") {
+          const data = resData.data;
+
+          data.forEach((element) => {
+            this.visitData.rows.push({
+              日期: element.date,
+              日访问量: element.count,
+            });
+          });
+        }
+      });
+    },
+    loadPanelData() {
+      this.$store.dispatch("getPanelInfo").then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == "200") {
+          const data = resData.data;
+          console.log("count:",data)
+          this.inforCardData[0].count = data.userCount;
+          this.inforCardData[1].count = data.certCount;
+          this.inforCardData[2].count = data.keyCount;
+        }
+      });
+    },
   },
   beforeDestroy() {
     if (this.timer) {
@@ -193,7 +214,7 @@ export default {
   },
   mounted() {},
   computed: {
-     state() {
+    state() {
       return this.$store.state.home;
     },
     height() {
@@ -210,7 +231,7 @@ export default {
 .count-style {
   font-size: 50px;
 }
-canvas{
-  height:300px !important;
+canvas {
+  height: 300px !important;
 }
 </style>

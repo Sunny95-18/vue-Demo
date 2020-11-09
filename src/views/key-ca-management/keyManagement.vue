@@ -3,13 +3,13 @@
     <TabPane label="密钥列表" name="keyList">
       <Card :bordered="false" dis-hover>
         <Button
-          style="marginleft: 30px"
+          style="margin-left: 30px"
           @click="isShow = true"
           type="primary"
           icon="md-key"
           >生成密钥</Button
         >
-        <div style="margintop: 20px">
+        <div style="margin-top: 20px">
           <Table
             ref="tab"
             stripe

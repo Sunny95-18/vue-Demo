@@ -79,7 +79,7 @@ export default {
               console.log("userInfo:",userInfo);
               let token = "Bearer " + userInfo.token;
               
-              let access =0;
+              let access =6;
               // if (this.form.username === "super_admin") {
               //  this.$store.commit("showSysUserRole");
               //   // 所有权限

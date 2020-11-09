@@ -9,11 +9,11 @@ export default {
   name: "App",
   mounted() {
     //关闭浏览器清空token
-    window.onunload  = function(e) {
-      window.localStorage.removeItem("c");
-    //  Cookies.remove("Authorization");
-    //  sessionStorage.removeItem(Authorization);
-    };
+    // window.onunload  = function(e) {
+    //   // window.localStorage.removeItem("c");
+    // //  Cookies.remove("Authorization");
+    // //  sessionStorage.removeItem(Authorization);
+    // };
     let that = this;
     window.onresize = function() {
       that.$store.commit("setDocumentBodyClientSize");

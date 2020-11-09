@@ -22,7 +22,7 @@ export default router;
 // 权限管理
 router.beforeEach((to, from, next) => {
   // console.log("name:"+to.name);
-  // console.log("to:"+to.matched[0].meta.access);
+  // console.log("to:"+to.meta.access);
   LoadingBar.start();
  
 
@@ -41,7 +41,7 @@ router.beforeEach((to, from, next) => {
 
     // 如果已经登陆判断是否有权限访问
     let access = Cookies.get("access");
-       
+      console.log("access:"+access)
     if (access == 0) {
       next();
     } else if (to.matched && to.matched.length > 0) {
