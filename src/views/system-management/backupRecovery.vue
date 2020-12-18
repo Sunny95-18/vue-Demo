@@ -2,7 +2,7 @@
   <Card :bordered="false" dis-hover>
     <Tabs value="backup">
       <TabPane label="系统备份" name="backup">
-        <Card :bordered="false" dis-hover style="margin:0 auto;width:600px">
+        <!-- <Card :bordered="false" dis-hover style="margin:0 auto;width:600px">
           <List border size="large">
             <ListItem>
               <h3 style="margin:0 auto">系统备份</h3>
@@ -14,10 +14,11 @@
               <Button style="margin:0 auto" type="success" @click="startBackup">开始备份</Button>
             </ListItem>
           </List>
-        </Card>
+        </Card> -->
+          <backup></backup>
       </TabPane>
       <TabPane label="系统恢复" name="recovery">
-        <Card :bordered="false" dis-hover style="margin:0 auto;width:600px">
+        <!-- <Card :bordered="false" dis-hover style="margin:0 auto;width:600px">
           <List border size="large">
             <ListItem>
               <h3 style="margin:0 auto">系统恢复</h3>
@@ -34,7 +35,8 @@
               <Button style="margin:0 auto" type="success" @click="startRecovery">开始恢复</Button>
             </ListItem>
           </List>
-        </Card>
+        </Card> -->
+         <recovery></recovery>
       </TabPane>
     </Tabs>
   </Card>
@@ -42,7 +44,10 @@
 
 <script>
 import common from "@/utils/common";
+import backup from "../key-ca-management/compoments/backup";
+import recovery from "../key-ca-management/compoments/recovery";
 export default {
+    components: { backup, recovery },
   data() {
     return {};
   },
