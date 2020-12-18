@@ -41,7 +41,6 @@ const app = {
                    }
                    return false;
              });
-             console.log("menus:",menus)
              return menus;
             }else{
                 return state.menuList;
@@ -189,7 +188,7 @@ const app = {
                 }
             });
             state.menuList = menuList;
-            console.log("menu:",menuList)
+    
         },
         changeMenuTheme (state, theme) {
             state.menuTheme = theme;

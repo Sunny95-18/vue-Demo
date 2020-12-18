@@ -29,7 +29,7 @@ export default {
                 if (resData.code == 200) {
                     state.loginName = resData.data.username;
                     state.hasGetInfo = true;
-                    this.commit("loadVmList", state.loginName);
+                    // this.commit("loadVmList", state.loginName);
                 }
             }).catch(err => {
 

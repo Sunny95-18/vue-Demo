@@ -101,9 +101,8 @@ export default {
     };
   },
   created() {
-    // console.log("333333333333")
     this.loadData();
-    // console.log("444444444")
+
   },
   mounted() {},
   computed: {

@@ -23,7 +23,7 @@ new Vue({
   components: { App },
   template: '<App/>',
   created () {
-    console.log("初始化菜单。。。");
+    // console.log("初始化菜单。。。");
     this.$store.commit('updateMenulist');
   }
 })

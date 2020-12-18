@@ -109,11 +109,11 @@ export default {
           width: 300,
           key: "Issuer",
         },
-         {
-          title: "颁发者",
-          width: 300,
-          key: "algName",
-        },
+        //  {
+        //   title: "颁发者",
+        //   width: 300,
+        //   key: "algName",
+        // },
         {
           title: "本次更新时间",
           width: 200,

@@ -79,7 +79,6 @@ export default {
         const filterVal = ["id", "name", "content", "date", "verify"];
         this.$store.commit("queryAllLog");
         const list = this.$store.state.logList.row;
-        console.log("list:" + list);
         const data = this.formatJson(filterVal, list);
         excel.export_json_to_excel({
           header: tHeader,

@@ -16,9 +16,9 @@
         </ListItem>
       </List>
     </Card>
-    <Card style="margin-top:20px">
+    <Card style="margin-top: 20px">
       <List border size="large">
-         <ListItem><h3>用户状态</h3></ListItem>
+        <ListItem><h3>用户状态</h3></ListItem>
         <Table
           ref="tab"
           border
@@ -27,12 +27,16 @@
           :data="rows"
           class="table"
           :height="tableHeight"
-          :span-method="handleSpan"
           :disabled-hover="true"
         >
-          <template slot-scope="{ index }" slot="action">
+          <template slot="action">
             <div>
-              <Button class="ops-btn" type="error" @click="deleteUser(index+1)">删除</Button>
+              <Button class="ops-btn" type="error" @click="deleteUser(1)"
+                >注销全部管理员</Button
+              >
+              <Button class="ops-btn" type="error" @click="deleteUser(0)"
+                >注销全部操作员</Button
+              >
             </div>
           </template>
         </Table>
@@ -46,32 +50,53 @@ export default {
   data() {
     return {
       formItem: {
-        key: ""
+        key: "",
       },
       columns: [
         {
           title: "当前权限状态",
+          key: "status",
           width: 200,
-          key: "status"
+          render: (h, params) => {
+            if (
+              (params.row.managerLoginInfo == "未登录" &&
+                params.row.operatorLoginInfo == "未登录") ||
+              params.row.operatorLoginInfo == "未添加"
+            ) {
+              return h("span", "无权限");
+            } else if (
+              params.row.managerLoginInfo == "未登录" &&
+              params.row.operatorLoginInfo == "已登录"
+            ) {
+              return h("span", "操作员权限");
+            } else if (
+              params.row.managerLoginInfo != "未登录" &&
+              params.row.operatorLoginInfo == "已登录"
+            ) {
+              return h("span", "超级管理员权限");
+            }
+          },
         },
         {
           title: "管理员数目",
           width: 200,
-          key: "number"
+          key: "managerCount",
         },
-
         {
           title: "已登录管理员",
-          width: 200,
-          key: "users"
+          width: 300,
+          key: "managerLoginInfo",
         },
-
+        {
+          title: "操作员状态",
+          width: 300,
+          key: "operatorLoginInfo",
+        },
         {
           title: "操作",
-            width: 200,
-          slot: "action"
-        }
-      ]
+          slot: "action",
+        },
+      ],
     };
   },
   created() {
@@ -80,76 +105,44 @@ export default {
   methods: {
     ...common.methods,
     loadData() {
-      this.$store.commit("adminList", this.queryParams);
+      this.$store.commit("queryManager", this.queryParams);
     },
     adminLogin() {
-      alert("登录成功");
+      this.$store.dispatch("managerLogout", this.formItem.key).then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == "200") {
+          this.loadData();
+          const userId = resData.data;
+          this.$Message.success(
+            userId == 0 ? "操作员登录成功！" : userId + "号管理员登录成功"
+          );
+        } else {
+          this.$Message.error("登录失败，错误码：" + resData.message);
+        }
+      });
     },
-    deleteUser(id){
-      alert(id)
+    deleteUser(id) {
+      this.$store.dispatch("managerLogout", id).then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == "200") {
+          this.loadData();
+          this.$Message.success(
+            id == 1 ? "注销管理员成功！" : "注销操作员成功！"
+          );
+        } else {
+          this.$Message.error(id == 1 ? "注销管理员失败！" : "注销操作员失败!");
+        }
+      });
     },
-    handleSpan({ row, column, rowIndex, columnIndex }) {
-      //合并第一列
-      if (rowIndex === 0 && columnIndex === 0) {
-        return {
-          rowspan: 3,
-          colspan: 1
-        };
-      } else if (rowIndex === 1 && columnIndex === 0) {
-        return {
-          rowspan: 0,
-          colspan: 0
-        };
-      } else if (rowIndex === 2 && columnIndex === 0) {
-        return {
-          rowspan: 0,
-          colspan: 0
-        };
-      }
-      //合并第二列
-      if (rowIndex === 0 && columnIndex === 0) {
-        return {
-          rowspan: 3,
-          colspan: 1
-        };
-      } else if (rowIndex === 1 && columnIndex === 0) {
-        return {
-          rowspan: 0,
-          colspan: 0
-        };
-      } else if (rowIndex === 2 && columnIndex === 0) {
-        return {
-          rowspan: 0,
-          colspan: 0
-        };
-      }
-      //合并第4列
-      if (rowIndex === 0 && columnIndex === 1) {
-        return {
-          rowspan: 3,
-          colspan: 1
-        };
-      } else if (rowIndex === 1 && columnIndex === 1) {
-        return {
-          rowspan: 0,
-          colspan: 0
-        };
-      } else if (rowIndex === 2 && columnIndex === 1) {
-        return {
-          rowspan: 0,
-          colspan: 0
-        };
-      }
-    }
   },
   computed: {
     ...common.computed,
     state() {
       return this.$store.state.adminUserManagement;
-    }
+    },
   },
   watch: {
-    $route() {}
-  }
+    $route() {},
+  },
 };
 </script>

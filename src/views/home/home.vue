@@ -199,7 +199,6 @@ export default {
         var resData = res.data;
         if (resData && resData.code == "200") {
           const data = resData.data;
-          console.log("count:",data)
           this.inforCardData[0].count = data.userCount;
           this.inforCardData[1].count = data.certCount;
           this.inforCardData[2].count = data.keyCount;

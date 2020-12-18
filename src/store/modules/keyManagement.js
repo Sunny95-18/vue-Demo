@@ -6,15 +6,11 @@ const keyManagement = {
         rows: []
     },
     mutations: {
-        queryKeyPage(state,queryParams){
+        queryKeyList(state,type){
             state.loading = true;
             const requestData = conf.requestData;
-            requestData.data ={
-                current:queryParams.current,
-                size:queryParams.size
-            };
+            requestData.data =type;
             setTimeout(function() {
-
                 axios.post(conf.apiServer + "key/getKeyList", requestData).then(
                     res => {
                         var resData = res.data;
@@ -31,17 +27,6 @@ const keyManagement = {
                     }).then(() => {
                         state.loading = false;
                     });
-
-
-
-                // var data = [];
-                // data.push({id:1,keyId:"20001",name:"SM2",length:256});
-                // data.push({id:2,keyId:"10001",name:"RSA[1024]",length:1024});
-                // data.push({id:3,keyId:"10002",name:"RSA[2048]",length:1024});
-                
-                // state.totalCount = data.length;
-                // state.rows = data;
-                // state.loading = false;
             },500);
         }
     },
@@ -49,6 +34,7 @@ const keyManagement = {
         KeyGeneration({ commit }, createKey) {
             const data=new FormData();
             data.append("keyType",createKey.type);
+            data.append("keyIndex",createKey,keyIndex)
             data.append("keyLength",createKey.length)
             return new Promise((resolve, reject) => {
                 axios.post(conf.apiServer + "key/KeyGeneration", data, {

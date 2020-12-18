@@ -23,6 +23,7 @@ import trustMechanism from './modules/trustMechanism'
 import crlManagement from './modules/crlManagement'
 import sginAdnEncryCert from './modules/sginAdnEncryCert'
 import home from './modules/home'
+import container from './modules/container'
 
 // 服务配置
 import {setApiServer} from "@/conf/"
@@ -83,7 +84,8 @@ const store = new Vuex.Store({
         trustMechanism,
         crlManagement,
         sginAdnEncryCert,
-        home
+        home,
+        container
     },
     getters
 }); 

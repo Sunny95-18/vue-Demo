@@ -42,21 +42,43 @@ export default {
       this.$store.commit("serviceShow", this.queryParams);
     },
     start(){
-        this.isStop=true
+       this.isStop=true
+   
+      
     },
     stop(){
-       
         this.isStop=false
+      //    this.$store.dispatch("changeServiceStatus",0).then((res) => {
+      //   var resData = res.data;
+      //   if (resData && resData.code == "200") {
+       
+      //    this.$Message.success("关闭成功!");
+      //   }else{
+      //     this.$Message.error("关闭失败")
+      //   }
+      // });
+        
     },
     reStart(){
-        this.content="重启成功，密码服务正在运行."
+       this.content="重启成功，密码服务正在运行."
+      //    this.$store.dispatch("changeServiceStatus",2).then((res) => {
+      //   var resData = res.data;
+      //   if (resData && resData.code == "200") {
+         
+      //     this.stop=true;
+      //    this.$Message.success("重启成功!");
+      //   }else{
+      //     this.$Message.error("重启失败")
+      //   }
+      // });
+       
     }
   },
   computed: {
     ...common.computed,
-    // state() {
-    //   return this.$store.state.serviceStatus;
-    // }
+    state() {
+      return this.$store.state.serviceStatus;
+    }
   },
   watch: {
     $route() {}

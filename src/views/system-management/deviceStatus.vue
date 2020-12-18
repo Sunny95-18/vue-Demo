@@ -11,8 +11,8 @@
         </div>
       </ListItem>
       <ListItem>
-        <Button style="marginLeft:500px" type="error" @click="sureCloseService=true">关闭服务</Button>
-        <Button style="marginLeft:100px" type="success" @click="sureRestartService=true">重启服务</Button>
+        <Button v-if="status==0" style="margin:0 auto" type="error" @click="sureCloseService=true">关闭服务</Button>
+        <Button v-else style="margin:0 auto" type="success" @click="sureRestartService=true">启动服务</Button>
       </ListItem>
     </List>
     <Modal v-model="sureCloseService" title="确定要关闭签名验签服务器吗？" @on-ok="closeService"></Modal>
@@ -30,14 +30,52 @@ export default {
       sureRestartService:false,
     };
   },
+   created() {
+    this.loadData();
+  },
   methods: {
     ...common.methods,
+    loadData(){
+         this.$store.dispatch("getServiceStatus").then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == "200") {
+          this.status = resData.data==true?0:1;;
+         
+        }else{
+          this.$Message.error("获取服务状态失败")
+        }
+      });
+    },
     closeService() {
-      this.status = 1;
+          this.$store.dispatch("changeServiceStatus",0).then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == "200") {
+          this.status = 1;
+         this.$Message.success("关闭成功!");
+        }else{
+          this.$Message.error("关闭失败")
+        }
+      });
+     
     },
     restartService() {
-      this.status = 0;
+           this.$store.dispatch("changeServiceStatus",1).then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == "200") {
+           this.status = 0;
+         this.$Message.success("启动服务成功!");
+        }else{
+          this.$Message.error("启动服务失败！")
+        }
+      });
+    
     },  
+  },
+    computed: {
+    ...common.computed,
+    state() {
+      return this.$store.state.serviceStatus;
+    }
   },
 };
 </script>

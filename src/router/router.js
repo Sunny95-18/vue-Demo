@@ -43,7 +43,7 @@ export const page500 = {
 export const otherRouter = {
     path: '/',
     name: 'otherRouter',
-    redirect: '/vmList/vmIndex',
+    // redirect: '/vmList/vmIndex',
     component: Main,
     children: [
         {
@@ -152,6 +152,12 @@ export const appRouter = [
         children: [
             {
                 path: 'deviceInit', title: '设备初始化', icon: 'md-infinite', name: 'device-init', component: () => import('@/views/system-management/deviceInit'),
+                meta: {
+                    access: ["6"]
+                }
+            },
+            {
+                path: 'deviceInfo', title: '设备基本信息', icon: 'md-barcode', name: 'device-info', component: () => import('@/views/system-management/deviceBasic'),
                 meta: {
                     access: ["6"]
                 }
@@ -374,6 +380,32 @@ export const appRouter = [
 
         ]
     },
+    {
+        path: '/container-management',
+        icon: 'md-key',
+        title: '应用实体管理',
+        name: 'container-management',
+        component: Main,
+        meta: {
+            access: ["0"],
+        },
+        children: [
+
+            {
+                path: 'createContainer', title: '创建应用实体', icon: 'md-key', name: 'create-container', component: () => import('@/views/container-mamagement/createContainer'),
+                meta: {
+                    access: ["0"],
+                }
+            },
+            {
+                path: 'containerList', title: '应用实体信息管理', icon: 'md-appstore', name: 'container-list', component: () => import('@/views/container-mamagement/containerList'),
+                meta: {
+                    access: ["0"],
+                }
+            },
+        ]
+    },
+
     // 审计员部分菜单权限
     {
         path: '/log-management',

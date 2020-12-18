@@ -89,7 +89,7 @@ export default {
                 newPwd:this.formValidate.newPwd,
                 newPwdConfirm:this.formValidate.newPwdConfirm,
             }
-            console.log("data:",data)
+    
           this.$Message.success("修改成功!");
         } else {
           this.$Message.error("参数错误!");
