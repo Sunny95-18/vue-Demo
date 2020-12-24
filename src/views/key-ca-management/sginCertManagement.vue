@@ -65,16 +65,16 @@
         </div>
         <Modal v-model="isInputShow" title="证书导入" @on-ok="inputCert">
           <Form ref="inputCertForm" :model="inputCertForm" :label-width="100">
-            <FormItem label="证书标识：" prop="certType">
+            <FormItem label="证书别名：" >
               <Input v-model="inputCertForm.certId" style="width: 200px" />
             </FormItem>
-            <FormItem label="证书类型：" prop="serialNumber">
+            <FormItem label="证书类型：" >
               <Select v-model="inputCertForm.certType" style="width: 200px">
                 <Option :value="1">PKCS10应答X509证书</Option>
                 <Option :value="2">PKCS12证书</Option>
               </Select>
             </FormItem>
-            <FormItem label="对应证书：" prop="version">
+            <FormItem label="对应证书：">
               <Upload
                 v-if="isShowUpload"
                 :action="uploadUrl"
@@ -345,7 +345,7 @@ export default {
           key: "id",
         },
         {
-          title: "证书标识",
+          title: "证书名称",
           width: 200,
           key: "certName",
         },

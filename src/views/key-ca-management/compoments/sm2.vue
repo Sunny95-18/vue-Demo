@@ -79,7 +79,12 @@ export default {
       this.$store.commit("queryKeyList", 1);
     },
     ok() {
-      this.$store.dispatch("KeyGeneration", this.createKeyForm).then((res) => {
+      const createKey={
+        type:1,
+        index:this.keyIndex,
+        length:256
+      }
+      this.$store.dispatch("KeyGeneration", createKey).then((res) => {
         var resData = res.data;
         if (resData && resData.code == "200") {
           this.$Message.success("生成密钥对成功!");

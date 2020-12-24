@@ -5,7 +5,7 @@
   <div class="home-bg">
     <Row :gutter="20" style="margin-top: 10px">
       <Col
-        span="6"
+        span="8"
         v-for="(infor, i) in inforCardData"
         :key="`infor-${i}`"
         style="height: 120px"

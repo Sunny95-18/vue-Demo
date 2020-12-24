@@ -1,25 +1,33 @@
 <template>
   <div class="div">
     <Card :bordered="false" dis-hover>
-        <p style="margin:0 auto">点击下方按钮，上传证书进行验证</p>
-        </br></br>
-      <Upload action="" style="margin:0 auto">
-        <Button icon="ios-cloud-upload-outline">上传证书验证</Button>
-      </Upload>
-
-
-
+         <Form  :label-width="100">
+        <FormItem label="OCSP地址：">
+          <Input style="width:200px" v-model="url"/>
+        </FormItem>
+          <FormItem label="端口号：">
+          <Input style="width:200px"  v-model="prot"/>
+        </FormItem>
+           <Button class="ops-btn" style="margin-left:150px" type="info">确定</Button>
+      </Form>
     </Card>
   </div>
 </template>
 <script>
-export default {};
+export default {
+  data(){
+    return {
+      url:"",
+      port:"",
+    }
+  }
+};
 </script>
 
 <style>
 .div {
   margin: 0 auto;
-  width: 500px;
+  width: 400px;
   height: 650px;
 }
 </style>

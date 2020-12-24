@@ -32,9 +32,10 @@ const keyManagement = {
     },
     actions:{
         KeyGeneration({ commit }, createKey) {
+            console.log("keyIndex:",createKey.index)
             const data=new FormData();
             data.append("keyType",createKey.type);
-            data.append("keyIndex",createKey,keyIndex)
+            data.append("keyIndex",createKey.index)
             data.append("keyLength",createKey.length)
             return new Promise((resolve, reject) => {
                 axios.post(conf.apiServer + "key/KeyGeneration", data, {

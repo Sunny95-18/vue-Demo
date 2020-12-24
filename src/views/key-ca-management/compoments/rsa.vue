@@ -30,7 +30,7 @@
           </template>
         </Table>
         <Modal v-model="isShow" title="生成RSA密钥对" @on-ok="ok">
-          <Form ref="createKeyForm" :model="createKeyForm" :label-width="150">
+          <Form :label-width="150">
             <FormItem label="密钥索引：" prop="type">
               <Input v-model="keyIndex" style="width: 200px" />
             </FormItem>
@@ -93,7 +93,12 @@ export default {
       this.loadData();
     },
     ok() {
-      this.$store.dispatch("KeyGeneration", this.createKeyForm).then((res) => {
+        const createKey={
+        type:1,
+        index:this.keyIndex,
+        length:256
+      }
+      this.$store.dispatch("KeyGeneration", createKey).then((res) => {
         var resData = res.data;
         if (resData && resData.code == "200") {
           this.$Message.success("生成密钥对成功!");
