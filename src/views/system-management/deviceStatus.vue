@@ -49,7 +49,7 @@ export default {
     closeService() {
           this.$store.dispatch("changeServiceStatus",0).then((res) => {
         var resData = res.data;
-        if (resData && resData.code == "200") {
+        if (resData && resData.code == "200"&& resData.code==true) {
           this.status = 1;
          this.$Message.success("关闭成功!");
         }else{
@@ -61,7 +61,7 @@ export default {
     restartService() {
            this.$store.dispatch("changeServiceStatus",1).then((res) => {
         var resData = res.data;
-        if (resData && resData.code == "200") {
+        if (resData && resData.code == "200" && resData.code==true) {
            this.status = 0;
          this.$Message.success("启动服务成功!");
         }else{

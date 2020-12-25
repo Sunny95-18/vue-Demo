@@ -24,6 +24,7 @@ import crlManagement from './modules/crlManagement'
 import sginAdnEncryCert from './modules/sginAdnEncryCert'
 import home from './modules/home'
 import container from './modules/container'
+import certVerifly from './modules/certVerifly'
 
 // 服务配置
 import {setApiServer} from "@/conf/"
@@ -85,7 +86,8 @@ const store = new Vuex.Store({
         crlManagement,
         sginAdnEncryCert,
         home,
-        container
+        container,
+        certVerifly
     },
     getters
 }); 

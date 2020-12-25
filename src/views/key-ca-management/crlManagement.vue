@@ -15,15 +15,16 @@
           class="table"
           :height="tableHeight"
         >
-          <template slot-scope="{ row, index }" slot="action">
+          <template slot-scope="{ row }" slot="action">
             <div>
-              <!-- <Button class="ops-btn" type="primary" @click="isEditShow=true">编辑</Button> -->
+               <Button class="ops-btn" type="primary" @click="showEdit(row.id)">配置</Button>
               <Poptip
                 confirm
                 title="确定删除该CRL吗?"
                 @on-ok="deleteCrl(row.id)"
                 placement="right"
               >
+              
                 <Button class="ops-btn" type="error">删除</Button>
               </Poptip>
             </div>
@@ -50,16 +51,24 @@
       <Form :model="addCrlForm" :label-width="100">
         <FormItem label="类型：">
           <Select v-model="addCrlForm.type">
-            <Option :value="1">文件</Option>
-            <Option :value="2">地址</Option>
+            <Option :value="0">文件</Option>
+            <Option :value="1">地址</Option>
           </Select>
         </FormItem>
-        <FormItem v-if="addCrlForm.type == 1" label="CRL文件：">
-          <Upload action="//jsonplaceholder.typicode.com/posts/">
-            <Button icon="ios-cloud-upload-outline">上传</Button>
-          </Upload>
+        <FormItem v-if="addCrlForm.type == 0" label="CRL文件：">
+         <Upload
+                v-if="isShowUpload"
+                :action="uploadUrl"
+                :before-upload="handleUpload"
+                accept=".txt"
+                :format="['cer', 'crt', 'pem', 'txt']"
+                :on-format-error="uploadFormatError"
+              >
+                <Button icon="ios-cloud-upload-outline">选择文件</Button>
+              </Upload>
+              <span v-else>{{ this.addCrlForm.file.name }}<Icon type="md-backspace" @click="deleteFile"/></span>
         </FormItem>
-        <FormItem v-if="addCrlForm.type == 2" label="CRL地址">
+        <FormItem v-if="addCrlForm.type == 1" label="CRL地址">
           <Input v-model="addCrlForm.url">
             <Select
               v-model="addCrlForm.urlType"
@@ -89,10 +98,13 @@ export default {
     return {
       isAddShow: false,
       isEditShow: false,
+      isShowUpload: true,
+      id:0,
       addCrlForm: {
-        type: 1,
+        type: 0,
         url: "",
         urlType: 1,
+        file:""
       },
       queryParams: {
         current: 1,
@@ -101,27 +113,27 @@ export default {
       columns: [
         {
           title: "序号",
-          width: 100,
+          width: 80,
           key: "id",
         },
         {
           title: "颁发者",
-          width: 300,
-          key: "Issuer",
+          width: 600,
+          key: "issuer",
         },
-        //  {
-        //   title: "颁发者",
-        //   width: 300,
-        //   key: "algName",
-        // },
+         {
+          title: "算法",
+          width: 150,
+          key: "algName",
+        },
         {
           title: "本次更新时间",
-          width: 200,
+          width: 250,
           key: "updateDate",
         },
         {
           title: "下次更新时间",
-          width: 200,
+          width: 250,
           key: "nextUpdateDate",
         },
         {
@@ -147,11 +159,47 @@ export default {
       this.queryParams.size = size;
       this.loadData();
     },
+      uploadFormatError(file, fileList) {
+      this.$Message.error("文件格式错误!");
+    },
+    handleUpload(file) {
+      this.addCrlForm.file = file;
+      this.isShowUpload = false;
+      return false;
+    },
+    deleteFile() {
+      this.isShowUpload = true;
+      this.addCrlForm.file = "";
+    },
+    showEdit(id){
+      this.isEditShow=true;
+      this.id=id;
+    },
     editCrl() {
-      this.$Message.success("修改成功!");
+      const editCrlFrom={
+        id:this.id,
+        url:this.addCrlForm.url
+      }
+         this.$store.dispatch("editCrl", editCrlFrom).then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == 200) {
+          this.$Message.success("CRL地址更新成功!");
+          this.loadData();
+        } else {
+          this.$Message.error("CRL地址更新失败! "+resData.message);
+        }
+      });
     },
     createCrl() {
-      this.$Message.success("创建CRL成功!");
+        this.$store.dispatch("addCrl", this.addCrlForm).then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == 200) {
+          this.$Message.success("CRL添加成功!");
+          this.loadData();
+        } else {
+          this.$Message.error("CRL添加失败! "+resData.message);
+        }
+      });
     },
     deleteCrl(id) {
       this.$store.dispatch("deleteCrl", id).then((res) => {
@@ -160,7 +208,7 @@ export default {
           this.$Message.success("CRL删除成功!");
           this.loadData();
         } else {
-          this.$Message.error("CRL删除失败!");
+          this.$Message.error("CRL删除失败! "+resData.message);
         }
       });
     },
@@ -169,6 +217,9 @@ export default {
     ...common.computed,
     state() {
       return this.$store.state.crlManagement;
+    },
+      uploadUrl() {
+      return "";
     },
   },
 };
