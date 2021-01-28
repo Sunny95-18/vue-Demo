@@ -1,9 +1,9 @@
-const serverInfo = {
+ const serverInfo = {
 
     /**
      * 后台服务地址
      */
-    server: "http://192.168.1.23:8080/"
+    server: "http://192.168.88.204:8080/svs/"
 }
 
 /**

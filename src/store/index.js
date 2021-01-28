@@ -5,8 +5,6 @@ import common from './modules/common'
 
 import logList from './modules/logList'
 import whiteList from './modules/whiteList'
-import asymmetricKey from'./modules/asymmetricKey'
-import symmetricKey from './modules/symmetricKey'
 import permission from './modules/permission'
 import user from './modules/user'
 import adminUserManagement from './modules/adminUserManagement'
@@ -14,10 +12,8 @@ import userPermissionList from './modules/userPermissionList'
 import serviceStatus from './modules/serviceStatus'
 import backupKey from './modules/backupKey'
 import guide from './modules/guide'
-import device from './modules/device'
 import getters from './getters'
 //
-import adminManagement from './modules/adminManagement'
 import keyManagement from './modules/keyManagement'
 import trustMechanism from './modules/trustMechanism'
 import crlManagement from './modules/crlManagement'
@@ -25,6 +21,10 @@ import sginAdnEncryCert from './modules/sginAdnEncryCert'
 import home from './modules/home'
 import container from './modules/container'
 import certVerifly from './modules/certVerifly'
+import system from './modules/system'
+import sm2Key from './modules/sm2Key'
+import rsaKey from './modules/rsaKey'
+import symmetryKey from './modules/symmetryKey'
 
 // 服务配置
 import {setApiServer} from "@/conf/"
@@ -69,8 +69,6 @@ const store = new Vuex.Store({
         common,
         logList,
         whiteList,
-        asymmetricKey,
-        symmetricKey,
         permission,
         user,
         adminUserManagement,
@@ -78,16 +76,18 @@ const store = new Vuex.Store({
         serviceStatus,
         backupKey,
         guide,
-        device,
         //
-        adminManagement,
         keyManagement,
         trustMechanism,
         crlManagement,
         sginAdnEncryCert,
         home,
         container,
-        certVerifly
+        certVerifly,
+        system,
+        sm2Key,
+        rsaKey,
+        symmetryKey
     },
     getters
 }); 

@@ -11,7 +11,7 @@ const home = {
         //获取设备系统信息
         getDeviceInfo({ commit }) {
             return new Promise((resolve, reject) => {
-                axios.get(conf.apiServer + "home/getDeviceInfo", { timeout: 5000 }).then(res => {
+                axios.get(conf.apiServer + "home/getDeviceInfo", { timeout: 15000 }).then(res => {
                     resolve(res);
                 }).catch(err => {
                     console.log(err.response)
@@ -34,7 +34,7 @@ const home = {
            //获取面板上的信息
            getPanelInfo({commit }){
             return new Promise((resolve, reject) => {
-                axios.get(conf.apiServer + "home/getPanelInfo", { timeout: 5000 }).then(res => {
+                axios.get(conf.apiServer + "home/getPanelInfo", { timeout: 15000 }).then(res => {
                     resolve(res);
                 }).catch(err => {
                     console.log(err.response)

@@ -65,14 +65,15 @@
 <script>
 import { setApiServer } from "@/conf/";
 import conf from "@/conf/";
+import {getLocalIP} from '@/utils/ip'
 export default {
   data() {
     return {
       isInit:false,
       logining: false,
       form: {
-        username: "super_admin",
-        password: "123456",
+        username: "admin1",
+        password: "12345678",
       },
       rules: {
         username: [
@@ -85,16 +86,16 @@ export default {
     };
   },
   created() {
-        this.$store.dispatch("checkInit").then((res) => {
-              var resData=res.data;
-              if(resData.data==true){
-                this.isInit=true;
-              }
-        }) .catch((err) => {
-            })
-            .then(() => {
-              this.logining = false;
-            });
+        // this.$store.dispatch("checkInit").then((res) => {
+        //       var resData=res.data;
+        //       if(resData.data==true){
+        //         this.isInit=true;
+        //       }
+        // }) .catch((err) => {
+        //     })
+        //     .then(() => {
+        //       this.logining = false;
+        //     });
   },
   mounted() {},
   methods: {
@@ -112,21 +113,13 @@ export default {
               if (resData && resData.code == "200") {
                 // 登陆成功
                 let userInfo = resData.data;
-                console.log("userInfo:", userInfo);
+               
                 let token = "Bearer " + userInfo.token;
-
-                let access = 0;
-                // if (this.form.username === "super_admin") {
-                //  this.$store.commit("showSysUserRole");
-                //   // 所有权限
-                //   access = 0;
-                // } else {
-                //    this.$store.commit("removeSysUserRole");
-                //   Cookies.set("access", 1);
-                //   access = 1;
-                // }
+                Cookies.remove("access");
+                let access = userInfo.role;
+                //-1 超级管理员，1操作员，2管理员，3审计员
+                // access=2;
                 this.$store.commit("setUserName", userInfo.loginName);
-
                 // 登陆成功获取用户信息，token等
                 this.$store.commit("setToken", token);
                 Cookies.set("access", access);

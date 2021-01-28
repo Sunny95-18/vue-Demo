@@ -6,9 +6,37 @@ const adminUserManagement = {
         rows: []
     },
     mutations: {
+        querAdminList(state, queryParams) {
+            state.loading = true;
+            const requestData = conf.requestData;
+            requestData.data = {
+                current: queryParams.current - 1,
+                size: queryParams.size
+            }
+            state.row = [];
+            setTimeout(function () {
+                axios.post(conf.apiServer + "auth/userList", requestData).then(
+                    res => {
+                        var resData = res.data;
+                        console.log("resData:", resData.data)
+                        if (resData.code == 200 && resData.data != null) {
+                            state.row = [];
+                            state.rows = resData.data.data;
+                            state.totalCount = resData.data.total;
+                        } else {
+                            state.rows = [];
+                            state.totalCount = 0;
+                        }
+                    }).catch(err => {
+                        console.error(err);
+                    }).then(() => {
+                        state.loading = false;
+                    });
+            }, 500);
+        },
         queryManager(state, queryParams) {
             state.loading = true;
-
+            state.rows=[];
             setTimeout(function () {
                 axios.post(conf.apiServer + "auth/getPrivilege").then(
                     res => {
@@ -45,11 +73,70 @@ const adminUserManagement = {
                 state.rows = data;
                 state.loading = false;
             }, 500);
-        }
+        },
     },
     actions: {
-          //管理员或操作员登录
-          managerLogout({ commit }, pin) {
+        //用户注册
+        createUser({ commit }, createUserForm) {
+            const requestData = conf.requestData;
+            requestData.data = {
+                userType: createUserForm.adminType,
+                username: createUserForm.username,
+                password: createUserForm.pin
+            };
+            return new Promise((resolve, reject) => {
+                axios.post(conf.apiServer + "auth/addUser", requestData, { timeout: 5000 }).then(res => {
+                    resolve(res);
+                }).catch(err => {
+                    console.log(err.response)
+                    reject(err);
+                });
+            })
+        },
+        //删除用户
+        deleteSystemUser({ commit }, id) {
+            const requestData = conf.requestData;
+            requestData.data = id;
+            return new Promise((resolve, reject) => {
+                axios.post(conf.apiServer + "auth/delete", requestData, { timeout: 5000 }).then(res => {
+                    resolve(res);
+                }).catch(err => {
+                    console.log(err.response)
+                    reject(err);
+                });
+            })
+        },
+        //修改用户口令
+        updatePassword({ commit }, formCustom) {
+            const requestData = conf.requestData;
+            requestData.data = formCustom;
+            return new Promise((resolve, reject) => {
+                axios.post(conf.apiServer + "auth/updatePwd", requestData, { timeout: 5000 }).then(res => {
+                    resolve(res);
+                }).catch(err => {
+                    console.log(err.response)
+                    reject(err);
+                });
+            })
+        },
+        //修改用户状态
+        // updateUserStatus({ commit },userStatus) {
+        //     const requestData = conf.requestData;
+        //     requestData.data = {
+        //        id:userStatus.id,
+        //        status:userStatus.status
+        //     };
+        //     return new Promise((resolve, reject) => {
+        //         axios.post(conf.apiServer + "auth/addUser", requestData, { timeout: 5000 }).then(res => {
+        //             resolve(res);
+        //         }).catch(err => {
+        //             console.log(err.response)
+        //             reject(err);
+        //         });
+        //     })
+        // },
+        //UKey--管理员或操作员登录
+        managerLogin({ commit }, pin) {
             const requestData = conf.requestData;
             requestData.data = pin;
             return new Promise((resolve, reject) => {
@@ -61,7 +148,7 @@ const adminUserManagement = {
                 });
             })
         },
-        //注销管理员或操作员
+        //UKey--注销管理员或操作员
         managerLogout({ commit }, userId) {
             const requestData = conf.requestData;
             requestData.data = userId;

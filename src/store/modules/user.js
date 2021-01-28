@@ -14,7 +14,6 @@ export default {
         nodeName: null,
         currentHost: null,
         isMaster: false,
-        vmIp: "",
         rows:[],
         totalCount:0
     },
@@ -55,14 +54,6 @@ export default {
         //设置用户权限
         setRoles: (state, roles) => {
             state.roles = roles
-        },
-        //设置访问Ip
-        setVmIp: (state, ip) => {
-            Cookies.set("vmIp", ip)
-        },
-        getVmIp: (state) => {
-            const ip = Cookies.get("vmIp")
-            state.vmIp = ip;
         },
         setHasGetInfo(state, status) {
             state.hasGetInfo = status
@@ -122,11 +113,10 @@ export default {
             return new Promise((resolve, reject) => {
                 const requestData = conf.requestData;
                 requestData.data = loginInfo;
-
-                axios.post(conf.apiServer + "auth/login", requestData, { timeout: 5000 }).then(res => {
+                axios.post(conf.apiServer + "auth/login", requestData, { timeout: 10000 }).then(res => {
                     resolve(res);
                 }).catch(err => {
-                    console.log(err.response)
+                    console.log("login:",err)
                     reject(err);
                 });
             })

@@ -6,15 +6,15 @@ const resolve = dir => {
 }
 
 const isProduction = process.env.NODE_ENV === 'production';
-
-const BASE_URL = isProduction ? '/ccee' : '/';
-
+const BASE_URL = isProduction ? '/svs' : '/';
+// const BASE_URL='/';
 // 线上打包使用可压缩 GZIP
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const productionGzipExtensions = ['js', 'css'];
 
 module.exports={
     publicPath: BASE_URL,
+
     runtimeCompiler:true,
     outputDir: './static',
     // build时放置生成的静态资源 (js、css、img、fonts) 的 (相对于 outputDir 的) 目录
@@ -67,5 +67,17 @@ module.exports={
         // .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
         .set('_c', resolve('src/components'))
     },
+    devServer:{
+      proxy:{
+        '/svs':{
+           target:'http://localhost:8080/',
+           changeOrigin:true,
+           pathRewrite:{
+             '/svs':''
+           }
+        }
+     }
+    },
+  
 
 }

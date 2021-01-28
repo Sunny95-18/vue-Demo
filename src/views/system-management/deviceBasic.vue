@@ -44,14 +44,14 @@ export default {
   methods: {
     ...common.methods,
     loadData() {
-      this.$store.commit("loadDeviceData", this.queryParams);
+      this.$store.commit("loadDeviceData");
     },
     addOpt() {}
   },
   computed: {
     ...common.computed,
     state() {
-      return this.$store.state.device;
+      return this.$store.state.system;
     }
   },
   watch: {

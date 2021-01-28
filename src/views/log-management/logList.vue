@@ -31,7 +31,7 @@
               <Button @click="verifyLog" type="primary" icon="md-book"
                 >审计</Button
               >&nbsp;
-              <Poptip
+              <!-- <Poptip
                 confirm
                 title="是否删除选中的日志记录?"
                 @on-ok="deleteLogs"
@@ -39,7 +39,7 @@
               >
                 <Button type="error" icon="md-close">删除</Button>
               </Poptip>
-              &nbsp;
+              &nbsp; -->
               <Button @click="exportTable" type="success" icon="md-add"
                 >导出</Button
               >

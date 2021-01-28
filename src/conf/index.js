@@ -2,8 +2,15 @@
  * 实现apiServer可在线上修改
  * 
  */
-let server = "http://192.168.88.19:8088/";
-// let server = "http://192.168.88.233:8088/";
+import { serverInfo } from "../../public/application"
+// let server = "http://192.168.88.204:8080/";  //本地
+let server = "http://192.168.88.202:8080/";   //linux下中创
+
+
+// let server = "http://192.168.88.202:8088/";   //linux jar包
+// let server="http://localhost:8080/"; //tomcat
+// let server=serverInfo.server;
+// let server="http://"+getUserIP()+":8080/"
 // if(window.AppServerInfo && typeof(AppServerInfo) == 'function') {
 //   server = AppServerInfo().getServerInfo("server");
 //   console.log("server:",server)
@@ -19,7 +26,8 @@ const conf = {
     /**
      * ip和端口
      */
-    server:"192.168.88.19:8088",
+    // server:"192.168.88.19:8088",
+    server:server,
     // server:"192.168.88.233:8088",
     /**
      * 上下文

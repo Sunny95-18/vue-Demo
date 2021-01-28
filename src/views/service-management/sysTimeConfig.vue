@@ -1,49 +1,102 @@
 <template>
- <div class="div">
-  <Card :bordered="false" dis-hover>
-    <p slot="title">系统时间设置</p>
-    <Form ref="logConfigureForm" :model="logConfigureForm" :rules="ruleValidate" :label-width="150">
-      <FormItem label="系统时间：" prop="mamagementLogType">
-        <DatePicker type="datetime" v-model="time" format="yyyy-MM-dd HH:mm:ss"  style="width: 200px"></DatePicker>
-      </FormItem>
-      <FormItem label="上次同步时间：" prop="mamagementLogType">
-        <Input  style="width:200px"/>
-      </FormItem>
-      <Divider />
-        <FormItem  label="时间自动同步:" prop="isBack" >
-           <Checkbox > </Checkbox>
-        </FormItem>
-         <FormItem label="时间间隔(分钟)：" prop="mamagementLogType">
-        <InputNumber :max="30" :min="1" v-model="interval"></InputNumber>
-         </FormItem>
-           <FormItem label="时间服务器：" prop="mamagementLogType">
-            <Input style="width:200px" />
-              <Button style="marginLeft:10px;" type="primary" @click="handleSubmit('logConfigureForm')">立即同步</Button>
-         </FormItem>
+  <Tabs value="time1">
+    <TabPane label="时间配置" name="time1">
+      <Card :bordered="false" style="height:450px" dis-hover>
+        <p slot="title">系统时间设置</p>
+        <Form :label-width="150">
+          <FormItem label="当前系统时间：">
+            <!-- <DatePicker type="datetime" v-model="time" format="yyyy-MM-dd HH:mm:ss"  style="width: 200px"></DatePicker> -->
+            <Input v-model="time" style="width: 200px" />
+          </FormItem>
+          <FormItem label="设置系统时间：">
+            <DatePicker type="datetime" v-model="newTime" format="yyyy-MM-dd HH:mm:ss"  style="width: 200px"></DatePicker>
+            <!-- <Input v-model="time" style="width: 200px" /> -->
+          </FormItem>
           <FormItem>
-          <Button type="primary" @click="handleSubmit('logConfigureForm')">保存</Button>
-        </FormItem>
-    </Form>
-  </Card>
- </div>
+            <Button type="primary" @click="setDate()">设置</Button>
+          </FormItem>
+        </Form>
+      </Card>
+    </TabPane>
+    <TabPane label="事件源配置" name="time2">
+      <Card>
+        <p slot="title">NTP设置</p>
+        <Form :label-width="150">
+          <FormItem label="NTP服务器IP：">
+            <Input v-model="ntpForm.ip" style="width: 200px" />
+          </FormItem>
+          <FormItem label="NTP端口号：">
+            <Input v-model="ntpForm.port" style="width: 200px" />
+          </FormItem>
+            <FormItem label="同步周期(分钟)：">
+            <Input v-model="ntpForm.interval" style="width: 200px" />
+          </FormItem>
+          <FormItem>
+            <Button type="primary" @click="save()">保存</Button>
+          </FormItem>
+        </Form>
+      </Card>
+    </TabPane>
+  </Tabs>
 </template>
 <script>
 export default {
-    data(){
-        return { 
-          time:"2020-09-21 15:44:00",
-          interval:10
-        };
+  data() {
+    return {
+      time: "",
+      newTime:"",
+      ntpForm:{
+        ip:"",
+        port:"",
+        interval:0
+      }
+    };
+  },
+  created() {
+    this.loadData();
+  },
+  methods: {
+    loadData() {
+      this.$store.dispatch("getNTPdate").then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == 200) {
+          this.time = resData.data.systimeDate;
+          this.ntpTime = resData.data.ntpDate;
+          this.ntpForm.ip=resData.data.ip;
+          this.ntpForm.port=resData.data.port;
+          this.ntpForm.interval=resData.data.interval;
+        } else {
+          this.$Message.error("时间获取失败!原因：" + resData.message);
+        }
+      });
     },
-    methods:{
-
+    setDate() {
+      this.$store.dispatch("setDate",this.newTime).then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == 200 && resData.data) {
+          this.loadData();
+          this.$Message.success("NTP时间源设置成功！");
+        } else {
+          this.$Message.error("NTP时间源设置失败!");
+        }
+      });
     },
+    save(){
+ this.$store.dispatch("setNtp",this.ntpForm).then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == 200 && resData.data) {
+          this.loadData();
+          this.$Message.success("时间设置成功！");
+        } else {
+          this.$Message.error("时间设置失败!原因："+resData.message);
+        }
+      });
+    }
+  },
+  computed: {
+    state() {
+      return this.$store.state.system;
+    },
+  },
 };
 </script>
-<style>
-.div {
-  margin: 0 auto;
-  width: 500px;
-  height: 400px;
-}
-</style>

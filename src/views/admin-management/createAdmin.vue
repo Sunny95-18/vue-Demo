@@ -2,106 +2,55 @@
   <div class="div">
     <Card :bordered="false">
       <p slot="title">新建管理员</p>
-      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="110">
-        <FormItem label="管理员类型：" prop="adminType">
+       <p style="color:red">注：操作员和管理员需要关联UKey，并输入UKey的口令作为密码</p>
+      <Form style="margin-top:10px" ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="110">
+        <FormItem label="管理员类型：">
           <Select v-model="formValidate.adminType">
-            <Option value="1">系统管理员</Option>
-            <Option value="2">审计员</Option>
+            
+            <Option :value="1">操作员</Option>
+            <Option :value="2">管理员</Option>
+            <Option :value="3">审计员</Option>
           </Select>
         </FormItem>
-          <FormItem  label="口令：" prop="pin">
-          <Input v-model="formValidate.pin" placeholder="请输入口令"/>
+          <FormItem  label="名称：" prop="username">
+          <Input v-model="formValidate.username" placeholder="请输入名称"/>
         </FormItem>
-        <!-- <FormItem label="证书来源：" prop="cerSource">
-          <Select v-model="formValidate.cerSource">
-            <Option value="1">导入DER证书</Option>
-            <Option value="2">由服务器生成</Option>
-          </Select>
+          <FormItem  label="密码：" prop="pin">
+          <Input v-model="formValidate.pin" type="password" placeholder="请输入密码"/>
         </FormItem>
-
-        <FormItem v-if="formValidate.cerSource==1" label="证书：" prop="adminType">
-          <Upload action="//jsonplaceholder.typicode.com/posts/">
-            <Button icon="ios-cloud-upload-outline">上传证书</Button>
-          </Upload>
-        </FormItem>
-
-        <FormItem v-if="formValidate.cerSource==2" label="名称：" prop="name">
-          <Input v-model="formValidate.name" placeholder="请输入名称"/>
-        </FormItem>
-        <FormItem v-if="formValidate.cerSource==2" label="组织：" prop="organization">
-          <Input v-model="formValidate.organization" />
-        </FormItem>
-        <FormItem v-if="formValidate.cerSource==2" label="部门：" prop="department">
-          <Input v-model="formValidate.organization" />
-        </FormItem>
-        <FormItem v-if="formValidate.cerSource==2" label="市/区：" prop="city">
-          <Input v-model="formValidate.organization" />
-        </FormItem>
-        <FormItem v-if="formValidate.cerSource==2" label="省/直辖市：" prop="province">
-          <Input v-model="formValidate.organization" />
-        </FormItem>
-        <FormItem v-if="formValidate.cerSource==2" label="国家：" prop="country">
-          <Input v-model="formValidate.country" placeholder="请输入国家"/>
-        </FormItem> -->
 
         <FormItem>
           <Button type="primary" @click="handleSubmit('formValidate')">添加</Button>
-          <Button @click="handleReset('formValidate')" style="margin-left: 80px">重置</Button>
         </FormItem>
       </Form>
     </Card>
   </div>
 </template>
 <script>
+import common from "@/utils/common";
 export default {
   data() {
     return {
       formValidate: {
         pin:"",
-        name: "",
-        country: "CN",
-        adminType: "1",
-        cerSource: "1",
-        organization: "",
-        department: "",
-        city: "",
-        province: "",
+        username: "",
+        adminType:1,
+       
         
       },
       ruleValidate: {
          pin: [
           {
             required: true,
-            message: "口令不可为空",
+            message: "密码不可为空",
             trigger: "blur",
           },
         ],
-        name: [
+        username: [
           {
             required: true,
             message: "名称不可为空",
             trigger: "blur",
-          },
-        ],
-        country: [
-          {
-            required: true,
-            message: "国家不可为空",
-            trigger: "blur",
-          },
-        ],
-        adminType: [
-          {
-            required: true,
-            message: "请选择管理员类型",
-            trigger: "change",
-          },
-        ],
-        cerSource: [
-          {
-            required: true,
-            message: "请选择证书来源",
-            trigger: "change",
           },
         ],
       },
@@ -111,14 +60,24 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$Message.success("Success!");
+           this.$store.dispatch("createUser", this.formValidate).then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == "200") {
+          this.$Message.success("添加成功！");
         } else {
-          this.$Message.error("Fail!");
+          this.$Message.error("添加失败，错误码：" + resData.message);
+        }
+      });
+        } else {
+          this.$Message.error("验证失败!");
         }
       });
     },
-    handleReset(name) {
-      this.$refs[name].resetFields();
+  },
+   computed: {
+    ...common.computed,
+    state() {
+      return this.$store.state.adminUserManagement;
     },
   },
 };

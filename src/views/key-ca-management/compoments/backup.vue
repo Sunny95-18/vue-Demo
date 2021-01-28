@@ -14,14 +14,14 @@
       </List>
       <!-- 第二步-->
       <List v-if="second" header="备份密钥向导" border split>
-        <ListItem>2、输出备份密钥分量[{{count}}]。</ListItem>
+        <ListItem>2、输出备份密钥分量[{{part}}]。</ListItem>
         <ListItem>请选择第1个管理员USBKey根据正确的方向插入设备中，并输入保护口令。</ListItem>
         <ListItem>管理员USBKey可以任意顺序，但不能重复。。</ListItem>
 
         <ListItem>
           <Form :model="formItem" :label-width="140" inline>
             <FormItem label="请输入PIN口令:">
-              <Input type="password" v-model="formItem.input" />
+              <Input type="password" v-model="pin" />
             </FormItem>
             <FormItem>
               <Button type="info" @click="secondOk">确定</Button>
@@ -36,7 +36,7 @@
         <ListItem>密码机内的密钥信息已经备份到密钥备份文件中。</ListItem>
 
         <ListItem>
-          <Form :model="formItem" :label-width="140" inline>
+          <Form :label-width="140" inline>
             <FormItem>
               <Button type="info" @click="thirdOk">下载文件</Button>
             </FormItem>
@@ -74,15 +74,13 @@ import common from "@/utils/common";
 export default {
   data() {
     return {
-      first: true,
+      first: false,
       second: false,
-      third: false,
+      third: true,
       four: false,
       modal1: false,
-      count: 0,
-      formItem: {
-        input: ""
-      },
+      part: 1,
+      pin:"",
       columns: [
         {
           title: "类型",
@@ -109,9 +107,52 @@ export default {
       (this.first = false), (this.second = true);
     },
     secondOk() {
-      (this.second = false), (this.third = true);
+      const exportKey={
+          part:this.part,
+          pin:this.pin
+      }
+        this.$store.dispatch("exportKey", exportKey).then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == 200) {
+             this.pin="";
+             this.part=resData.data;
+        } else {
+          this.$Message.error("秘钥备份失败!"+resData.message);
+        }
+      });
+      console.log("part:",this.part)
+      if(this.part>=3){
+        (this.second = false), (this.third = true);
+      }
+     
+    },
+      //base64 转换 blob
+    dataURLtoBlob(dataurl) {
+      var bstr = atob(dataurl);
+      var n = bstr.length;
+      var u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: "pdf" });
     },
     thirdOk() {
+       this.$store.dispatch("exportFile").then((res) => {
+     let blob = new Blob([res], {
+              type: "application/octet-stream"
+            });
+            const fileName="szlxsmbak.dat"
+             if (window.navigator.msSaveOrOpenBlob) {
+              navigator.msSaveBlob(blob, fileName);
+            } else {
+              var link = document.createElement("a");
+              link.href = window.URL.createObjectURL(blob);
+              link.download = fileName;
+              link.click();
+              //释放内存
+              window.URL.revokeObjectURL(link.href);
+            }
+      });
       this.third = false;
       this.four = true;
     },

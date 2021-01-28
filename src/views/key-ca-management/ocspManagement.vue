@@ -6,7 +6,7 @@
           <Input style="width:200px" v-model="url"/>
         </FormItem>
           <FormItem label="端口号：">
-          <Input style="width:200px"  v-model="prot"/>
+          <Input style="width:200px"  v-model="port"/>
         </FormItem>
            <Button class="ops-btn" style="margin-left:150px" type="info">确定</Button>
       </Form>

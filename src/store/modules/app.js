@@ -33,7 +33,8 @@ const app = {
     getters: {
         // 根据不同的权限加载不同的菜单
         menus: (state, getters, rootState) => {
-            let accessCode = parseInt(Cookies.get('access'));
+            // let accessCode = parseInt(Cookies.get('access'));
+            let accessCode=state.access;
             if(accessCode!=-2){
              var menus=state.menuList.filter(router=>{
                    if(!router.meta|| router.meta.access==accessCode){

@@ -105,16 +105,35 @@ export const appRouter = [
         path: '/admin',
         icon: 'md-cog',
         title: '用户登录',
-        name: 'system-management',
+        name: 'admin-login',
         component: Main,
         meta: {
-            access: ["0"],
+            access: ["2"],
         },
         children: [
             {
                 path: 'adminlogin', title: '用户登录', icon: 'md-body', name: 'user-login', component: () => import('@/views/adminLogin/index'),
                 meta: {
-                    access: ["0"]
+                    access: ["2"]
+                }
+            },
+            
+        ]
+    },
+    {
+        path: '/system-init-management',
+        icon: 'md-cog',
+        title: '系统管理',
+        name: 'system-init',
+        component: Main,
+        meta: {
+            access: ["-1"],
+        },
+        children: [
+            {
+                path: 'deviceInit', title: '设备初始化', icon: 'md-infinite', name: 'device-init', component: () => import('@/views/system-management/deviceInit'),
+                meta: {
+                    access: ["-1"]
                 }
             },
         ]
@@ -134,11 +153,18 @@ export const appRouter = [
                 meta: {
                     access: ["-1"]
                 },
-            }
+            },
+            {
+                path: 'adminList', title: '管理员列表', icon: 'md-people', name: 'admin-list', component: () => import('@/views/admin-management/adminList'),
+                meta: {
+                    access: ["-1"]
+                },
+            },
 
 
         ]
     },
+
     //超级管理员部分
     {
         path: '/system-management',
@@ -147,68 +173,68 @@ export const appRouter = [
         name: 'system-management',
         component: Main,
         meta: {
-            access: ["6"],
+            access: ["2"],
         },
         children: [
             {
-                path: 'deviceInit', title: '设备初始化', icon: 'md-infinite', name: 'device-init', component: () => import('@/views/system-management/deviceInit'),
-                meta: {
-                    access: ["6"]
-                }
-            },
-            {
                 path: 'deviceInfo', title: '设备基本信息', icon: 'md-barcode', name: 'device-info', component: () => import('@/views/system-management/deviceBasic'),
                 meta: {
-                    access: ["6"]
+                    access: ["2"]
                 }
             },
             {
-                path: 'deviceStatus', title: '设备状态', icon: 'md-more', name: 'device-status', component: () => import('@/views/system-management/deviceStatus'),
+                path: 'updatePwd', title: '修改口令', icon: 'md-more', name: 'update-password', component: () => import('@/views/system-management/updatePwd'),
                 meta: {
-                    access: ["6"]
+                    access: ["2"]
+                }
+            },
+            {
+                path: 'deviceRunInfo', title: '设备自检', icon: 'md-checkmark', name: 'device-run-info', component: () => import('@/views/system-management/deviceRunInfo'),
+                meta: {
+                    access: ["2"]
                 }
             },
             {
                 path: 'backupRecovery', title: '备份/恢复', icon: 'logo-python', name: 'backup-recovery', component: () => import('@/views/system-management/backupRecovery'),
                 meta: {
-                    access: ["6"]
+                    access: ["2"]
                 }
             },
             {
                 path: 'systemUpgrade', title: '系统升级', icon: 'md-arrow-round-up', name: 'system-upgrade', component: () => import('@/views/system-management/systemUpgrade'),
                 meta: {
-                    access: ["6"]
+                    access: ["2"]
                 }
             }
         ]
     },
 
-    {
-        path: '/admin-management',
-        icon: 'md-contacts',
-        title: '管理员管理',
-        name: 'admin-management',
-        component: Main,
-        meta: {
-            access: ["6"]
-        },
-        children: [
-            {
-                path: 'createAdmin', title: '新建管理员', icon: 'md-person-add', name: 'create-admin', component: () => import('@/views/admin-management/createAdmin'),
-                meta: {
-                    access: ["6"]
-                },
-            },
-            {
-                path: 'adminList', title: '管理员列表', icon: 'md-people', name: 'admin-list', component: () => import('@/views/admin-management/adminList'),
-                meta: {
-                    access: ["6"]
-                },
-            },
+    // {
+    //     path: '/admin-management',
+    //     icon: 'md-contacts',
+    //     title: '管理员管理',
+    //     name: 'admin-management',
+    //     component: Main,
+    //     meta: {
+    //         access: ["6"]
+    //     },
+    //     children: [
+    //         {
+    //             path: 'createAdmin', title: '新建管理员', icon: 'md-person-add', name: 'create-admin', component: () => import('@/views/admin-management/createAdmin'),
+    //             meta: {
+    //                 access: ["6"]
+    //             },
+    //         },
+    //         {
+    //             path: 'adminList', title: '管理员列表', icon: 'md-people', name: 'admin-list', component: () => import('@/views/admin-management/adminList'),
+    //             meta: {
+    //                 access: ["6"]
+    //             },
+    //         },
 
 
-        ]
-    },
+    //     ]
+    // },
     // {
     //     path: '/authority-management',
     //     icon: 'ios-contact',
@@ -288,37 +314,37 @@ export const appRouter = [
         name: 'service-management',
         component: Main,
         meta: {
-            access: ["0"],
+            access: ["2"],
         },
         children: [
             {
                 path: 'deviceStatus', title: '设备状态', icon: 'md-more', name: 'service-status', component: () => import('@/views/system-management/deviceStatus'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
             {
                 path: 'systemTimeConfigure', title: '系统时间设置', icon: 'md-time', name: 'sys-time-config', component: () => import('@/views/service-management/sysTimeConfig'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
             {
                 path: 'networkConfigure', title: '网络配置', icon: 'md-git-network', name: 'network-config', component: () => import('@/views/service-management/networkConfigure'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
             {
                 path: 'HAManagement', title: 'HA管理', icon: 'logo-python', name: 'ha-management', component: () => import('@/views/service-management/haManagement'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
             {
                 path: 'whiteList', title: '白名单管理', icon: 'md-list', name: 'white-list', component: () => import('@/views/service-management/whiteList'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             }
 
@@ -331,50 +357,50 @@ export const appRouter = [
         name: 'key-ca-management',
         component: Main,
         meta: {
-            access: ["0"],
+            access: ["2"],
         },
         children: [
 
             {
                 path: 'keyManagement', title: '密钥管理', icon: 'md-key', name: 'key-management', component: () => import('@/views/key-ca-management/keyManagement'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
             {
                 path: 'trustMechanism', title: '受信机构管理', icon: 'md-appstore', name: 'trust-mechanism', component: () => import('@/views/key-ca-management/trustMechanism'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
             {
                 path: 'certVerifyConf', title: '证书验证方式配置', icon: 'md-filing', name: 'cert-verify-conf', component: () => import('@/views/key-ca-management/certVerifyConf'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
             {
                 path: 'crlManagement', title: 'CRL管理', icon: 'md-cart', name: 'crl-management', component: () => import('@/views/key-ca-management/crlManagement'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
             {
                 path: 'ocspManagement', title: 'OCSP管理', icon: 'md-cart', name: 'ocsp-management', component: () => import('@/views/key-ca-management/ocspManagement'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
             {
                 path: 'sginCertManagement', title: '签名证书管理', icon: 'md-card', name: 'sgin-cert-management', component: () => import('@/views/key-ca-management/sginCertManagement'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
             {
                 path: 'encryCertManagement', title: '加密证书管理', icon: 'md-card', name: 'encry-cert-management', component: () => import('@/views/key-ca-management/encryCertManagement'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
 
@@ -387,20 +413,20 @@ export const appRouter = [
         name: 'container-management',
         component: Main,
         meta: {
-            access: ["0"],
+            access: ["2"],
         },
         children: [
 
             {
                 path: 'createContainer', title: '创建应用实体', icon: 'md-key', name: 'create-container', component: () => import('@/views/container-mamagement/createContainer'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
             {
                 path: 'containerList', title: '应用实体信息管理', icon: 'md-appstore', name: 'container-list', component: () => import('@/views/container-mamagement/containerList'),
                 meta: {
-                    access: ["0"],
+                    access: ["2"],
                 }
             },
         ]
@@ -414,26 +440,26 @@ export const appRouter = [
         name: 'log-management',
         component: Main,
         meta: {
-            access: ["1"],
+            access: ["3"],
         },
         children: [
 
             {
                 path: 'logConfigure', title: '日志配置', icon: 'md-albums', name: 'log-configure', component: () => import('@/views/log-management/logConfigure'),
                 meta: {
-                    access: ["1"],
+                    access: ["3"],
                 }
             },
             {
                 path: 'logList', title: '日志查看', icon: 'md-eye', name: 'log-list', component: () => import('@/views/log-management/logList'),
                 meta: {
-                    access: ["1"],
+                    access: ["3"],
                 }
             },
             {
                 path: 'logArchiving', title: '日志归档', icon: 'md-log-out', name: 'log-archiving', component: () => import('@/views/log-management/logArchiving'),
                 meta: {
-                    access: ["1"],
+                    access: ["3"],
                 }
             }
 

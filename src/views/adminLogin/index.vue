@@ -57,25 +57,28 @@ export default {
           title: "当前权限状态",
           key: "status",
           width: 200,
-          render: (h, params) => {
-            if (
-              (params.row.managerLoginInfo == "未登录" &&
-                params.row.operatorLoginInfo == "未登录") ||
-              params.row.operatorLoginInfo == "未添加"
-            ) {
-              return h("span", "无权限");
-            } else if (
-              params.row.managerLoginInfo == "未登录" &&
-              params.row.operatorLoginInfo == "已登录"
-            ) {
-              return h("span", "操作员权限");
-            } else if (
-              params.row.managerLoginInfo != "未登录" &&
-              params.row.operatorLoginInfo == "已登录"
-            ) {
-              return h("span", "超级管理员权限");
-            }
-          },
+          key:"permission"
+          // render: (h, params) => {
+          //   if (
+          //     (params.row.managerLoginInfo == "未登录" &&
+          //       (params.row.operatorLoginInfo == "未登录") ||
+          //     params.row.operatorLoginInfo == "未添加")
+          //   ) {
+          //     return h("span", "无权限");
+          //   } else if (
+          //     params.row.managerLoginInfo == "未登录" &&
+          //     params.row.operatorLoginInfo == "已登录"
+          //   ) {
+          //     return h("span", "操作员权限");
+          //   }else if(params.row.managerLoginInfo!="未登录"&&(params.row.operatorLoginInfo=="未登录"|| params.row.operatorLoginInfo=="未添加")){
+          //     return h("span", "管理员权限");
+          //   } else if (
+          //     params.row.managerLoginInfo != "未登录" &&
+          //     params.row.operatorLoginInfo == "已登录"
+          //   ) {
+          //     return h("span", "超级管理员权限");
+          //   }
+          // },
         },
         {
           title: "管理员数目",
@@ -108,7 +111,7 @@ export default {
       this.$store.commit("queryManager", this.queryParams);
     },
     adminLogin() {
-      this.$store.dispatch("managerLogout", this.formItem.key).then((res) => {
+      this.$store.dispatch("managerLogin", this.formItem.key).then((res) => {
         var resData = res.data;
         if (resData && resData.code == "200") {
           this.loadData();

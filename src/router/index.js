@@ -41,7 +41,7 @@ router.beforeEach((to, from, next) => {
 
     // 如果已经登陆判断是否有权限访问
     let access = Cookies.get("access");
-    if (access == 0) {
+    if (access == 2) {
       next();
     } else if (to.matched && to.matched.length > 0) {
       let root = to.matched[0];

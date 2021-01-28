@@ -44,7 +44,7 @@
             <FormItem label="网关：" prop="mamagementLogType">
               <Input v-model="networkForm.gateWay2" style="width: 200px" />
             </FormItem>
-             <Checkbox v-model="this.networkForm.bond">多网卡绑定, 多个网口共享一个地址（仅第一个地址有效），实现网络冗余</Checkbox>
+             <Checkbox v-model="networkForm.bond">多网卡绑定, 多个网口共享一个地址（仅第一个地址有效），实现网络冗余</Checkbox>
              <p style="margin-top:5px;color:blue">注：多网卡设备也只能配置一个网关地址，同网段访问可将网关配置为“0.0.0.0”。</p>
             <FormItem style="margin-top:10px">
               <Button type="primary" @click="save">保存</Button>
@@ -106,6 +106,7 @@ export default {
         gateWay2: "",
         bond: true,
       },
+      bond:true
     };
   },
   created() {
@@ -133,6 +134,7 @@ export default {
       });
     },
     save() {
+      console.log("this:",this.networkForm)
       this.$store.dispatch("editNetwork", this.networkForm).then((res) => {
         var resData = res.data;
         if (resData && resData.code == "200") {

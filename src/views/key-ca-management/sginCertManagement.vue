@@ -217,12 +217,12 @@
             :model="certRequestForm"
             :label-width="140"
           >
-            <FormItem label="申请方式：" prop="certDN" style="height: 15px">
+            <!-- <FormItem label="申请方式：" prop="certDN" style="height: 15px">
               <Select v-model="certRequestForm.method" style="width: 200px">
                 <Option :value="1">离线申请</Option>
                 <Option :value="2">在线申请</Option>
               </Select>
-            </FormItem>
+            </FormItem> -->
             <FormItem label="名称(CN)：" prop="name" style="height: 15px">
               <Input v-model="certRequestForm.name" style="width: 200px" />
             </FormItem>

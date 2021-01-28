@@ -34,6 +34,7 @@ const serviceStatus = {
         },
         //修改网口信息
         editNetwork({ commit }, networkForm) {
+            console.log("networkForm:",networkForm)
             const requestData = conf.requestData;
             requestData.data = networkForm;
             return new Promise((resolve, reject) => {

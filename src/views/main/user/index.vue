@@ -118,17 +118,16 @@ export default {
   methods: {
       loadData() {
       this.$store.dispatch("getUserInfo").then((res) =>{
-    
-          // var resData = res.data;
-          // this.username=resData.data.username;
-          //   this.$store.commit("loadVmList", this.username);
-          if(res.data.code==402){
+        const resData=res.data;
+        
+          if(resData.code==402){
             this.$Message.error("token已失效，请重新登录")
             removeToken();
-             this.$router.push({
-          name: "login"
-        });
+             this.$router.push({name: "login"});
           }
+             let access=resData.data.role;
+              // access=2;
+           this.$store.commit("setAccess", access);
         this.$store.commit("setUserName",res.data.data.username);
       }).catch(err=>{
         if(err.response) {
@@ -143,9 +142,6 @@ export default {
         this.$router.push({
           name: "login"
         });
-      } else if (name == "govmList") {
-        Cookies.remove("vmIp");
-        this.$router.push({ name: "vm_list" });
       } else {
         this.isShow = true;
       }

@@ -45,7 +45,7 @@
             />
           </div>
           <div style="margintop: 40px; margin-left: 20px; margin-top: 20px">
-            内存使用率: {{ memory }}% (1004.93 MiB of 5.78 GiB)
+            内存使用率: {{ memory }}%
             <Progress
               v-if="memory <= 20"
               :percent="memory"
@@ -64,7 +64,7 @@
             />
           </div>
           <div style="margintop: 40px; margin-left: 20px; margin-top: 20px">
-            硬盘容量: {{ capacity }}% 0(10 GiB of 40 GiB)
+            硬盘容量: {{ capacity }}% 
             <Progress
               v-if="capacity <= 20"
               :percent="capacity"
@@ -121,25 +121,25 @@ export default {
   components: { VeLine, VeGauge, InforCard, CountTo },
   data() {
     return {
-      cpu: 40,
-      memory: 17,
-      capacity: 50,
+      cpu: 0,
+      memory: 0,
+      capacity: 0,
       inforCardData: [
         // { title: "累计点击", icon: "md-person", count: 232, color: "#9A66E4" },
         {
           title: "用户数量",
           icon: "md-contacts",
-          count: 2,
+          count: 0,
           color: "#2d8cf0",
         },
 
         {
           title: "证书数量",
           icon: "md-book",
-          count: 8,
+          count: 0,
           color: "#19be6b",
         },
-        { title: "密钥数量", icon: "md-key", count: 45, color: "#ed3f14" },
+        { title: "密钥数量", icon: "md-key", count: 0, color: "#ed3f14" },
         // { title: '新增互动', icon: 'md-chatbubbles', count: 12, color: '#E46CBB' },
         // { title: '新增页面', icon: 'md-map', count: 14, color: '#9A66E4' }
       ],
@@ -161,7 +161,7 @@ export default {
     this.loadPanelData();
     window.setInterval(() => {
       setTimeout(this.getDeviceInfo(), 0);
-    }, 15000);
+    }, 20000);
   },
   methods: {
     ...common.methods,
@@ -174,7 +174,7 @@ export default {
         var resData = res.data;
         if (resData && resData.code == "200") {
           this.cpu = resData.data.cpu;
-          this.memory = resData.data.cpu;
+          this.memory = resData.data.memory;
           this.capacity = resData.data.disk;
         }
       });

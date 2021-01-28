@@ -13,17 +13,17 @@
           :height="tableHeight"
         >
           <template slot-scope="{ row,index }" slot="action">
-            <Button v-if="row.status===1" class="ops-btn" type="success" @click="changeAdminStatus(row.id,0)">启用</Button>
-            <Button v-else class="ops-btn" type="warning"  @click="changeAdminStatus(row.id,1)">停用</Button>
+            <!-- <Button v-if="row.status===1" class="ops-btn" type="success" @click="changeAdminStatus(row.id,0)">启用</Button>
+            <Button v-else class="ops-btn" type="warning"  @click="changeAdminStatus(row.id,1)">停用</Button> -->
             <Button class="ops-btn" type="error"  @click="deleteAdmin(row.id)">删除</Button>
           </template>
 
           <Page
             ref="page"
             slot="footer"
-            :current="queryParams.pageNumber"
+            :current="queryParams.current"
             :total="totalCount"
-            :page-size="queryParams.pageSize"
+            :page-size="queryParams.size"
             show-total
             @on-change="changePage"
             @on-page-size-change="changePageSize"
@@ -45,24 +45,28 @@ export default {
   data() {
     return {
       queryParams: {
-        pageNumber: 1,
-        pageSize: 10,
+        current: 1,
+        size: 10,
       },
       columns: [
         {
           title: "用户名",
           width: 250,
-          key: "name",
+          key: "username",
         },
         {
           title: "管理员类型",
           width: 250,
-          key: "adminType",
+          key: "role",
           render: (h, { row, index }) => {
-            if (row.adminType == 1) {
-              return h("span", "系统管理员");
-            } else if (row.adminType == 2) {
-              return h("span", "审计员");
+            if (row.role == 1) {
+              return h("span", "操作员");
+            } else if (row.role == 2) {
+              return h("span", "管理员");
+            }else if(row.role==3){
+              return h("span","审计员");
+            }else {
+              return h("span","超级管理员")
             }
           },
         },
@@ -109,22 +113,43 @@ export default {
     loadData() {
       this.$store.commit("querAdminList", this.queryParams);
     },
-    changeAdminStatus(id,status){
-       this.$Message.success("你点击了修改管理员状态");
+      changePage(p){
+      this.queryParams.current=p;
+      this.loadData();
+    },
+     changePageSize(size) {
+      this.queryParams.size = size;
+      this.loadData();
+    },
+    // changeAdminStatus(id,status){
+    //   //  this.$Message.success("你点击了修改管理员状态");
     //      const changAdmin = {
     //     id: id,
     //     status: status
     //   };
     // this.$store.commit("updateAdminStatus", changAdmin);
-    },
+    // },
     deleteAdmin(id){
-         this.$Message.success("你点击了删除");
+          this.$store.dispatch("deleteSystemUser",id).then((res) => {
+              var resData=res.data;
+              if(resData.data==true){
+                this.loadData();
+                this.$Message.success("删除成功！");
+              }else{
+                this.$Message.error("删除失败，原因："+resData.message);
+              }
+        }) .catch((err) => {
+            })
+            .then(() => {
+              this.logining = false;
+            });
+        
     }
   },
   computed: {
     ...common.computed,
     state() {
-      return this.$store.state.adminManagement;
+      return this.$store.state.adminUserManagement;
     },
   },
   mounted() {},
