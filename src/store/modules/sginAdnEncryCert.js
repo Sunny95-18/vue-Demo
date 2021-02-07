@@ -77,7 +77,22 @@ const sginAdnEncryCert = {
                      });
                  });
                
-             }
+             },
+             getAsymmetricKeyIndex({ commit},type ){
+                const requestData=conf.requestData;
+                requestData.data=type;
+                     return new Promise((resolve, reject) => {
+                         axios.post(conf.apiServer + "key/getAsymmetricKeyIndex",requestData,{
+                             timeout: 15000,             
+                         }).then(res => {
+                             resolve(res);
+                         }).catch(err => {
+                             console.log(err.response)
+                             reject(err);
+                         });
+                     });
+                   
+                 },
     }
 
 }

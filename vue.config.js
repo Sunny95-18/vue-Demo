@@ -6,8 +6,8 @@ const resolve = dir => {
 }
 
 const isProduction = process.env.NODE_ENV === 'production';
-const BASE_URL = isProduction ? '/svs' : '/';
-// const BASE_URL='/';
+// const BASE_URL = isProduction ? '/svs' : '/';
+const BASE_URL='/';
 // 线上打包使用可压缩 GZIP
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const productionGzipExtensions = ['js', 'css'];

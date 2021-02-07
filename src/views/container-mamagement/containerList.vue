@@ -241,9 +241,9 @@ export default {
         },
         {
           title: "签名证书",
-          key: "signCertPath",
+          key: "signCert",
           render: (h, params) => {
-            if (params.row.signCertPath != null) {
+            if (params.row.signCert != null&&params.row.signCert!='') {
               return h("span", "已导入");
             } else {
               return h("span", "未导入");
@@ -252,9 +252,9 @@ export default {
         },
         {
           title: "加密证书",
-          key: "encryptCertPath",
+          key: "encryptCert",
           render: (h, params) => {
-            if (params.row.encryptCertPath != null) {
+            if (params.row.encryptCert != null&&params.row.encryptCert!='') {
               return h("span", "已导入");
             } else {
               return h("span", "未导入");
@@ -263,9 +263,9 @@ export default {
         },
         {
           title: "加密密钥对",
-          key: "keyPairPath",
+          key: "keyPair",
           render: (h, params) => {
-            if (params.row.keyPairPath != null) {
+            if (params.row.keyPair != null&&params.row.keyPair!='') {
               return h("span", "已导入");
             } else {
               return h("span", "未导入");
@@ -277,9 +277,9 @@ export default {
           key: "status",
           render: (h, params) => {
             if (
-              params.row.signCertPath != null &&
-              params.row.encryptCertPath != null &&
-              params.row.keyPairPath != null
+              params.row.signCert != null &&
+              params.row.encryptCert != null &&
+              params.row.keyPair != null
             ) {
               return h("span", "可使用");
             } else {

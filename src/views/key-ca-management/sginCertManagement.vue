@@ -390,6 +390,7 @@ export default {
   },
   created() {
     this.loadData();
+    this.getAllKeyIndex();
   },
   methods: {
     ...common.methods,
@@ -455,7 +456,18 @@ export default {
         }
       });
     },
+    getAllKeyIndex(){
+         this.$store.dispatch("getAsymmetricKeyIndex",0).then((res) => {
+        var resData = res.data;
+        if (resData && resData.code == "200") {
+           console.log("map:",resData.data);
+        } else {
+          this.$Message.error("获取失败!");
+        }
+      });
+    },
     downLoadCert(id) {
+     
       this.$Message.success("下载成功!");
     },
     createCert() {
