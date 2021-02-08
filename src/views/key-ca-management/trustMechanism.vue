@@ -18,7 +18,7 @@
         :height="tableHeight"
       >
         <template slot-scope="{ row, index }" slot="action">
-          <Button class="ops-btn" type="primary" @click="showMechanism"
+          <Button class="ops-btn" type="primary" @click="showMechanism(row.id)"
             >查看</Button
           >
           <!-- <Button class="ops-btn" type="primary" @click="updateMechanism">配置</Button> -->
@@ -213,9 +213,13 @@ export default {
           title: "主题",
           key: "theme",
         },
+          {
+          title: "序列号",
+          key: "serialNumber",
+        },
          {
           title: "密钥",
-          width: 200,
+          width: 150,
           key: "keyType",
         },
         {
@@ -262,8 +266,8 @@ export default {
       });
     },
     
-    showMechanism() {
-       this.$store.dispatch("detail",1).then((res) => {
+    showMechanism(id) {
+       this.$store.dispatch("detail",id).then((res) => {
         var resData = res.data;
         console.log("resData",resData)
         if (resData && resData.code == 200) {
@@ -307,10 +311,10 @@ export default {
     },
     downloadMechanism(id) {
          this.$store.dispatch("download",id).then((response) => {
-       let blob = new Blob([response], {
+       let blob = new Blob([response.data], {
               type: "application/octet-stream"
             });
-            const fileName="111.cer"
+            const fileName="ca证书.crt"
              if (window.navigator.msSaveOrOpenBlob) {
               navigator.msSaveBlob(blob, fileName);
             } else {
@@ -322,7 +326,6 @@ export default {
               window.URL.revokeObjectURL(link.href);
             }
       });
- 
     },
   },
   computed: {

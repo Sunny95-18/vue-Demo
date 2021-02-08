@@ -82,6 +82,7 @@ const trustMechanism = {
         download({ commit },id) {
             return new Promise((resolve, reject) => {
                 axios.get(conf.apiServer + "ca/download/"+id, {
+                    responseType: 'blob',
                     timeout: 5000,
                 }).then(res => {
                     resolve(res);

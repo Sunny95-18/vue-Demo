@@ -3,7 +3,7 @@
  * 
  */
 import { serverInfo } from "../../public/application"
-// let server = "http://192.168.88.204:8080/";  //本地
+// let server = "http://192.168.88.19:8080/";  //本地
 let server = "http://192.168.88.202:8080/";   //linux下中创
 
 
